@@ -11,3 +11,12 @@
 ## Why?
 
 I intend for this game to be simple and usable by anyone who wants to play a fun video game. Eventually the goal is to upload it to Steam and make it a proper game, but for now it will just be the core combat. I always liked video games and card games, so moving my own card game into a video game format sounds incredibly fun and interesting!
+
+## User Stories
+
+- As a user, I want to be able to add an arbitrary number of ally and enemy characters to the game, with a corresponding board size
+- As a user, I want to be able to move my characters on their turns
+- As a user, I want to be able to attack with my characters
+- As a user, I want to be able to view each character's abilities
+- As a user, I want to be able to view the turn order, which is a list containing all characters
+- As a user, I want to be able to view the boardstate of the game
