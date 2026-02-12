@@ -2,15 +2,15 @@ package model;
 
 import java.util.ArrayList;
 
-public class AllyFilter implements CharacterFilter {
+public class AliveFilter implements CharacterFilter {
 
-    public AllyFilter() {}
+    public AliveFilter() {}
     
-    // EFFECTS: filters out non-ally characters from list of characters
+    // EFFECTS: filters out dead characters from list of characters
     public ArrayList<Character> characterFilter(ArrayList<Character> characters) {
         ArrayList<Character> validCharacters = new ArrayList<Character>();
         for (Character c : characters) {
-            if (MokeGame.getAllies().contains(c)) {
+            if (!c.isDead()) {
                 validCharacters.add(c);
             }
         }

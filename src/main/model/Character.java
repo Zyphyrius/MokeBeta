@@ -19,7 +19,7 @@ public abstract class Character {
     // MODIFIES: this
     // EFFECTS: lose health equal to damage, if damage <= 0, do nothing
     //          if damage >= health, set health to 0
-    public void Hurt(int damage) {
+    public void hurt(int damage) {
         if (damage > 0) {
             if (damage >= health) {
                 this.health = 0;
@@ -33,7 +33,7 @@ public abstract class Character {
     // MODIFIES: this
     // EFFECTS: increase health by healing, health can't exceed max health
     //          can't heal someone who is dead
-    public void Heal(int healing) {
+    public void heal(int healing) {
         if (!isDead()) {
             this.health += healing;
             if (health > maxHealth) {
@@ -54,7 +54,7 @@ public abstract class Character {
     // MODIFIES: target
     // EFFECTS: performs attack on a target
     public void attack(Character target) {
-        target.Hurt(attack);
+        target.hurt(attack);
     }
 
     // EFFECTS: returns all characters in range that are not itself with specified filter

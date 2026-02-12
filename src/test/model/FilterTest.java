@@ -20,6 +20,7 @@ public class FilterTest {
     AllyFilter af;
     EnemyFilter ef;
     NoFilter nf;
+    AliveFilter alivef;
 
     @BeforeEach
     void runBefore() {
@@ -34,10 +35,15 @@ public class FilterTest {
         enemies.add(c2);
         enemies.add(c4);
         mg = new MokeGame(allies, enemies);
+        af = new AllyFilter();
+        ef = new EnemyFilter();
+        nf = new NoFilter();
+        alivef = new AliveFilter();
     }
 
     @Test
     void testAllyFilter() {
+        af.characterFilter(MokeGame.getTurnOrder());
         assertEquals(af.characterFilter(MokeGame.getTurnOrder()), List.of(c3, c1));
     }
 
@@ -49,5 +55,13 @@ public class FilterTest {
     @Test
     void testNoFilter() {
         assertEquals(nf.characterFilter(MokeGame.getTurnOrder()), MokeGame.getTurnOrder());
+    }
+
+    @Test
+    void testAliveFilter() {
+        c1.hurt(1000);
+        c4.hurt(1000);
+        c2.hurt(5);
+        assertEquals(alivef.characterFilter(MokeGame.getTurnOrder()), List.of(c3, c2));
     }
 }

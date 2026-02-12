@@ -55,7 +55,6 @@ public class Gameboard {
         findTile(x, y).setCharacter(character);
     }
 
-    // EFFECTS: returns list of all tiles in board
     public ArrayList<Tile> getTiles() {
         return tiles;
     }

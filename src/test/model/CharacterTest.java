@@ -48,33 +48,33 @@ public class CharacterTest {
 
     @Test
     void testHurt() {
-        c1.Hurt(10);
+        c1.hurt(10);
         assertEquals(90, c1.getHealth());
-        c1.Hurt(-10);
+        c1.hurt(-10);
         assertEquals(90, c1.getHealth());
-        c1.Hurt(30);
+        c1.hurt(30);
         assertEquals(60, c1.getHealth());
-        c1.Hurt(70);
+        c1.hurt(70);
         assertEquals(0, c1.getHealth());
     }
 
     @Test
     void testIsDead() {
-        c1.Hurt(99);
+        c1.hurt(99);
         assertFalse(c1.isDead());
-        c1.Hurt(1);
+        c1.hurt(1);
         assertTrue(c1.isDead());
     }
 
     @Test
     void testHeal() {
-        c1.Heal(100);
+        c1.heal(100);
         assertEquals(100, c1.getHealth());
-        c1.Hurt(50);
-        c1.Heal(60);
+        c1.hurt(50);
+        c1.heal(60);
         assertEquals(100, c1.getHealth());
-        c1.Hurt(100);
-        c1.Heal(10);
+        c1.hurt(100);
+        c1.heal(10);
         assertEquals(0, c1.getHealth());
         assertTrue(c1.isDead());
     }

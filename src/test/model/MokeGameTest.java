@@ -57,13 +57,33 @@ public class MokeGameTest {
         assertFalse(mg.getMoved());
         mg.endMove();
         assertTrue(mg.getMoved());
+        assertFalse(mg.getAttacked());
+        mg.attackCharacter(c1);
+        assertTrue(mg.getAttacked());
         mg.nextTurn();
         assertFalse(mg.getMoved());
+        assertFalse(mg.getAttacked());
         assertEquals(c4, mg.getCurrentCharacter());
         mg.nextTurn();
         mg.nextTurn();
         mg.nextTurn();
         assertEquals(c3, mg.getCurrentCharacter());
+    }
+
+    @Test
+    void testFirstAliveCharacter() {
+        c3.hurt(1000);
+        assertEquals(c4, mg.findFirstAlive());
+        c2.hurt(1000);
+        assertEquals(c4, mg.findFirstAlive());
+    }
+
+    @Test
+    void testFirstAliveCharacterStartLastIndex() {
+        mg.setCurrentCharacter(c2);
+        c2.hurt(1000);
+        c3.hurt(1000);
+        assertEquals(c4, mg.findFirstAlive());
     }
 
     @Test
@@ -73,16 +93,44 @@ public class MokeGameTest {
         assertEquals(MokeGame.getAllies(), allies);
         assertEquals(MokeGame.getEnemies(), enemies);
         assertEquals(mg.getCurrentCharacter(), c1);
-        c1.Hurt(100);
-        c4.Hurt(100);
-        c2.Hurt(1);
+        c1.hurt(100);
+        c4.hurt(100);
+        c2.hurt(1);
         mg.checkDead();
-        assertEquals(MokeGame.getAllies().size(), 1);
-        assertEquals(MokeGame.getAllies().get(0), c3);
-        assertEquals(MokeGame.getEnemies().size(), 1);
-        assertEquals(MokeGame.getEnemies().get(0), c2);
-        assertEquals(MokeGame.getTurnOrder().size(), 2);
-        assertEquals(mg.getCurrentCharacter(), c2);
+        assertEquals(1, MokeGame.getAllies().size());
+        assertEquals(c3, MokeGame.getAllies().get(0));
+        assertEquals(1, MokeGame.getEnemies().size());
+        assertEquals(c2, MokeGame.getEnemies().get(0));
+        assertFalse(mg.isGameOver());
+        assertEquals(2, MokeGame.getTurnOrder().size());
+        assertEquals(c2, mg.getCurrentCharacter());
+    }
+
+    @Test
+    void testCheckDeadWin() {
+        mg.checkDead();
+        assertFalse(mg.isGameOver());
+        c2.hurt(1000);
+        mg.checkDead();
+        assertFalse(mg.isGameOver());
+        c4.hurt(1000);
+        mg.checkDead();
+        assertTrue(mg.isGameOver());
+        assertTrue(mg.didWin());
+    }
+
+    @Test
+    void testCheckDeadLoss() {
+        c1.hurt(1000);
+        c2.hurt(1000);
+        c3.hurt(1000);
+        mg.checkDead();
+        assertTrue(mg.isGameOver());
+        assertFalse(mg.didWin());
+        c4.hurt(1000);
+        mg.checkDead();
+        assertTrue(mg.isGameOver());
+        assertFalse(mg.didWin());
     }
 
     @Test
@@ -97,7 +145,7 @@ public class MokeGameTest {
     void testAttackCharacter() {
         assertFalse(mg.getAttacked());
         mg.attackCharacter(c2);
-        assertEquals(c2.getHealth(), 50);
+        assertEquals(50, c2.getHealth());
         assertTrue(mg.getAttacked());
     }
 

@@ -13,6 +13,8 @@ public class MokeGame {
     private int movesLeft;
     private boolean attacked;
     private int turnIndex;
+    private boolean gameOver;
+    private boolean win;
     
     // REQUIRES: allies.size() and enemies.size() > 0
     // EFFECTS: makes a game with allies and enemies
@@ -32,6 +34,7 @@ public class MokeGame {
         moved = false;
         attacked = false;
         movesLeft = currentCharacter.getMove();
+        gameOver = false;
     }
 
     // REQUIRES: allies.size() and enemies.size() > 0
@@ -61,25 +64,65 @@ public class MokeGame {
     // EFFECTS: sets current character to next character in turn order and resets moved and attacked and movesLeft
     //          when at end of turn order, return to first
     public void nextTurn() {
-
+        turnIndex++;
+        if (turnIndex >= turnOrder.size()) {
+            turnIndex = 0;
+        }
+        currentCharacter = turnOrder.get(turnIndex);
+        moved = false;
+        attacked = false;
+        movesLeft = currentCharacter.getMove();
     }
 
     // MODIFIES: this
-    // EFFECTS: removes all dead characters from allies, enemies, and turn order, then change turnIndex accordingly
+    // EFFECTS: removes all dead characters from allies, enemies, and turn order, then change turnIndex accordingly, then checks if won/lost
     public void checkDead() {
-
+        Character firstAlive = findFirstAlive();
+        AliveFilter aliveFilter = new AliveFilter();
+        allies = aliveFilter.characterFilter(allies);
+        enemies = aliveFilter.characterFilter(enemies);
+        checkGameOver();
+        if (!gameOver){
+            turnOrder = makeTurnOrder();
+            turnIndex = turnOrder.indexOf(firstAlive);
+            currentCharacter = turnOrder.get(turnIndex);
+        }    
     }
 
     // EFFECTS: returns first alive character, starting with the current character
     public Character findFirstAlive() {
-        return null;
+        int tempTurnIndex = turnIndex;
+        for (int i=0; i < turnOrder.size(); i++) {
+            if (!turnOrder.get(tempTurnIndex).isDead()) {
+                break;
+            }
+            tempTurnIndex++;
+            if (tempTurnIndex >= turnOrder.size()) {
+                tempTurnIndex = 0;
+            }
+        }
+        return turnOrder.get(tempTurnIndex);
+    }
+
+    // EFFECTS: checks if game is over. over when allies or enemies are all gone
+    //          if it is, set gameOver to true and determine if won/lost
+    //          if both sides are completely dead, it is a loss
+    public void checkGameOver() {
+        if (allies.isEmpty()) {
+            gameOver = true;
+            win = false;
+        } else if (enemies.isEmpty()) {
+            gameOver = true;
+            win = true;
+        }
     }
 
     // REQUIRES: target within range
     // MODIFIES: character
     // EFFECTS: gets current character to attack target, set attacked = true
     public void attackCharacter(Character target) {
-
+        attacked = true;
+        currentCharacter.attack(target);
     }
 
     // MODIFIES: character
@@ -99,52 +142,52 @@ public class MokeGame {
     // MODIFIES: this
     // EFFECTS: set current character to character, and set corresponding turnIndex
     public void setCurrentCharacter(Character c) {
-
+        currentCharacter = c;
+        turnIndex = turnOrder.indexOf(c);
     }
 
-    // EFFECTS: returns turn order index
     public int getTurnIndex() {
         return turnIndex;
     }
 
-    // EFFECTS: returns list of all allies
     public static ArrayList<Character> getAllies() {
         return allies;
     }
 
-    // EFFECTS: returns list of all enemies
     public static ArrayList<Character> getEnemies() {
         return enemies;
     }
 
-    // EFFECTS: returns turn order
     public static ArrayList<Character> getTurnOrder() {
         return turnOrder;
     }
 
-    // EFFECTS: returns current character whose turn it is
     public Character getCurrentCharacter() {
         return currentCharacter;
     }
 
-    // EFFECTS: returns gameboard
     public Gameboard getGameboard() {
         return gameboard;
     }
 
-    // EFFECTS: returns if attacked
     public Boolean getAttacked() {
         return attacked;
     }
 
-    // EFFECTS: returns if moved
     public Boolean getMoved() {
         return moved;
     }
 
-    // EFFECTS: returns moves left
     public int getMovesLeft() {
         return movesLeft;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean didWin() {
+        return win;
     }
     
 }

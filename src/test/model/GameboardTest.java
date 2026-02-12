@@ -53,6 +53,8 @@ public class GameboardTest {
         assertTrue(g.validTile(4, 0));
         assertFalse(g.validTile(5, 0));
         assertFalse(g.validTile(0, 9));
+        assertFalse(g.validTile(6, 9));
+        assertFalse(g.validTile(-5, -2));
     }
 
 
