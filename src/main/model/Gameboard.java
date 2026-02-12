@@ -28,7 +28,7 @@ public class Gameboard {
     public Tile findTile(int x, int y) {
         int tile=0;
         for (int i = 0; i < x+y*rowLength; i++) {
-            tile = i;
+            tile++;
         }
         return tiles.get(tile);
     }
@@ -47,6 +47,11 @@ public class Gameboard {
     // MODIFIES: this
     // EFFECTS: places a character on a given tile at coordinates (x,y) and removes character from all other tiles with that character
     public void placeCharacter(int x, int y, Character character) {
+        for (Tile t : tiles) {
+            if (t.getCharacter() == character) {
+                t.removeCharacter();
+            }
+        }
         findTile(x, y).setCharacter(character);
     }
 

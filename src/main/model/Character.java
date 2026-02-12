@@ -17,44 +17,67 @@ public abstract class Character {
     //private ArrayList<String> states;
 
     // MODIFIES: this
-    // EFFECTS: lose health equal to damage, if damage < 0, do nothing
+    // EFFECTS: lose health equal to damage, if damage <= 0, do nothing
+    //          if damage >= health, set health to 0
     public void Hurt(int damage) {
+        if (damage > 0) {
+            if (damage >= health) {
+                this.health = 0;
+            } else {
+                this.health -= damage;
+            }
+        }
+    }
 
+    // MODIFIES: this
+    // EFFECTS: increase health by healing, health can't exceed max health
+    //          can't heal someone who is dead
+    public void Heal(int healing) {
+        if (!isDead()) {
+            this.health += healing;
+            if (health > maxHealth) {
+                health = maxHealth;
+            }
+        }
     }
 
     // EFFECTS: return true if health <= 0
     public Boolean isDead() {
-        return false;
+        if (health > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     // MODIFIES: target
     // EFFECTS: performs attack on a target
     public void attack(Character target) {
-
+        target.Hurt(attack);
     }
 
-    // MODIFIES: this, gameboard
-    // EFFECTS: moves character up by 1 tile if valid
+    // MODIFIES: this
+    // EFFECTS: moves character position coordinates up by 1
     public void moveUp() {
-
+        this.yPos -= 1;
     }
 
-    // MODIFIES: this, gameboard
-    // EFFECTS: moves character down by 1 tile if valid
+    // MODIFIES: this
+    // EFFECTS: moves character position coordinates down by 1
     public void moveDown() {
-
+        this.yPos += 1;
     }
 
-    // MODIFIES: this, gameboard
-    // EFFECTS: moves character left by 1 tile if valid
-    public void moveLeft() {
-
-    }
-
-    // MODIFIES: this, gameboard
-    // EFFECTS: moves character right by 1 tile if valid
+    // MODIFIES: this
+    // EFFECTS: moves character position coordinates right by 1
     public void moveRight() {
+        this.xPos += 1;
+    }
 
+    // MODIFIES: this
+    // EFFECTS: moves character position coordinates left by 1
+    public void moveLeft() {
+        this.xPos -= 1;
     }
 
     // EFFECTS: returns name

@@ -13,7 +13,7 @@ public class Tile {
 
     // EFFECTS: returns the character on this tile, or null if none
     public Character getCharacter() {
-        if (!character.equals(null)) {
+        if (character != null) {
             return character;
         }
         return null;

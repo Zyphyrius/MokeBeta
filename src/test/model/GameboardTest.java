@@ -40,6 +40,12 @@ public class GameboardTest {
     }
 
     @Test
+    void testFindTile() {
+        assertEquals(g.getTiles().get(0), g.findTile(0, 0));
+        assertEquals(g.getTiles().get(24), g.findTile(4, 4));
+    }
+
+    @Test
     void testValidTile() {
         assertTrue(g.validTile(0, 0));
         g.placeCharacter(0, 0, c1);
