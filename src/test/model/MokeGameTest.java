@@ -37,27 +37,28 @@ public class MokeGameTest {
 
     @Test
     void testConstructor() {
-        assertEquals(mg.getAllies(), allies);
-        assertEquals(mg.getEnemies(), enemies);
+        assertEquals(MokeGame.getAllies(), allies);
+        assertEquals(MokeGame.getEnemies(), enemies);
         assertEquals(mg.getGameboard().getTiles().size(), 25);
     }
 
     @Test
     void testTurnOrder() {
-        assertEquals(4, mg.getTurnOrder().size());
-        assertEquals(c3, mg.getTurnOrder().get(0));
-        assertEquals(c4, mg.getTurnOrder().get(1));
-        assertEquals(c1, mg.getTurnOrder().get(2));
-        assertEquals(c2, mg.getTurnOrder().get(3));
+        assertEquals(4, MokeGame.getTurnOrder().size());
+        assertEquals(c3, MokeGame.getTurnOrder().get(0));
+        assertEquals(c4, MokeGame.getTurnOrder().get(1));
+        assertEquals(c1, MokeGame.getTurnOrder().get(2));
+        assertEquals(c2, MokeGame.getTurnOrder().get(3));
     }
 
     @Test
     void testNextTurn() {
         assertEquals(c3, mg.getCurrentCharacter());
-        assertTrue(mg.getMoved());
-        mg.endMove();
         assertFalse(mg.getMoved());
+        mg.endMove();
+        assertTrue(mg.getMoved());
         mg.nextTurn();
+        assertFalse(mg.getMoved());
         assertEquals(c4, mg.getCurrentCharacter());
         mg.nextTurn();
         mg.nextTurn();
@@ -67,18 +68,21 @@ public class MokeGameTest {
 
     @Test
     void testCheckDead() {
+        mg.setCurrentCharacter(c1);
         mg.checkDead();
-        assertEquals(mg.getAllies(), allies);
-        assertEquals(mg.getEnemies(), enemies);
+        assertEquals(MokeGame.getAllies(), allies);
+        assertEquals(MokeGame.getEnemies(), enemies);
+        assertEquals(mg.getCurrentCharacter(), c1);
         c1.Hurt(100);
         c4.Hurt(100);
         c2.Hurt(1);
         mg.checkDead();
-        assertEquals(mg.getAllies().size(), 1);
-        assertEquals(mg.getAllies().get(0), c3);
-        assertEquals(mg.getEnemies().size(), 1);
-        assertEquals(mg.getEnemies().get(0), c2);
-        assertEquals(mg.getTurnOrder().size(), 2);
+        assertEquals(MokeGame.getAllies().size(), 1);
+        assertEquals(MokeGame.getAllies().get(0), c3);
+        assertEquals(MokeGame.getEnemies().size(), 1);
+        assertEquals(MokeGame.getEnemies().get(0), c2);
+        assertEquals(MokeGame.getTurnOrder().size(), 2);
+        assertEquals(mg.getCurrentCharacter(), c2);
     }
 
     @Test
@@ -87,6 +91,14 @@ public class MokeGameTest {
         assertEquals(mg.getTurnIndex(), 3);
         mg.setCurrentCharacter(c4);
         assertEquals(mg.getTurnIndex(), 1);
+    }
+
+    @Test
+    void testAttackCharacter() {
+        assertFalse(mg.getAttacked());
+        mg.attackCharacter(c2);
+        assertEquals(c2.getHealth(), 50);
+        assertTrue(mg.getAttacked());
     }
 
     void testXY(int xPos, int yPos, Character c) {

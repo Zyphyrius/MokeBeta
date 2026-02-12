@@ -25,6 +25,7 @@ public abstract class Character {
                 this.health = 0;
             } else {
                 this.health -= damage;
+
             }
         }
     }
@@ -56,6 +57,20 @@ public abstract class Character {
         target.Hurt(attack);
     }
 
+    // EFFECTS: returns all characters in range that are not itself with specified filter
+    public ArrayList<Character> getInRange(CharacterFilter cf) {
+        ArrayList<Character> inRange = new ArrayList<Character>();
+        ArrayList<Character> allCharacters = new ArrayList<Character>(MokeGame.getAllies());
+        allCharacters.addAll(MokeGame.getEnemies());
+        allCharacters = cf.characterFilter(allCharacters);
+        for (Character c : allCharacters) {
+            if (c != this & range >= Math.abs(c.getX() - this.xPos) & range >= Math.abs(c.getY() - this.yPos)) {
+                inRange.add(c);
+            }
+        }
+        return inRange;
+    }
+
     // MODIFIES: this
     // EFFECTS: moves character position coordinates up by 1
     public void moveUp() {
@@ -80,107 +95,78 @@ public abstract class Character {
         this.xPos -= 1;
     }
 
-    // EFFECTS: returns name
     public String getName() {
         return name;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's name
     public void setName(String name) {
         this.name = name;
     }
 
-    // EFFECTS: returns health
     public int getHealth() {
         return health;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's max health
     public void setMaxHealth(int maxHP) {
         this.maxHealth = maxHP;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's health
     public void setHealth(int hp) {
         this.health = hp;
     }
 
-    // EFFECTS: returns xPos
     public int getX() {
         return xPos;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's x
     public void setX(int xPos) {
         this.xPos = xPos;
     }
 
-    // EFFECTS: returns yPos
     public int getY() {
         return yPos;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's y
     public void setY(int yPos) {
         this.yPos = yPos;
     }
 
-    // EFFECTS: returns ability description
     public String getAbility() {
         return ability;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's ability description
     public void setAbility(String ability) {
         this.ability = ability;
     }
 
-    // EFFECTS: returns attack
     public int getAttack() {
         return attack;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's attack
     public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    // EFFECTS: returns speed
     public int getSpeed() {
         return speed;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's speed
     public void setSpeed(int speed) {
         this.speed = speed;
     }
 
-    // EFFECTS: returns move
     public int getMove() {
         return move;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's move
     public void setMove(int move) {
         this.move = move;
     }
 
-    // EFFECTS: returns range
     public int getRange() {
         return range;
     }
 
-    // MODIFIES: this 
-    // EFFECTS: sets character's range
     public void setRange(int range) {
         this.range = range;
     }

@@ -1,10 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Tile {
     private Character character;
-    //private ArrayList<String> states;
 
     // EFFECTS: creates a tile with no character on it
     public Tile() {

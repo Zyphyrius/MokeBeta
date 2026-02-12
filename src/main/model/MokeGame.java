@@ -1,13 +1,12 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 // an instance of the game that handles all characters and turns
 public class MokeGame {
-    private ArrayList<Character> allies;
-    private ArrayList<Character> enemies;
-    private ArrayList<Character> turnOrder;
+    private static ArrayList<Character> allies;
+    private static ArrayList<Character> enemies;
+    private static ArrayList<Character> turnOrder;
     private Character currentCharacter;
     private Gameboard gameboard;
     private boolean moved;
@@ -15,18 +14,47 @@ public class MokeGame {
     private boolean attacked;
     private int turnIndex;
     
+    // REQUIRES: allies.size() and enemies.size() > 0
     // EFFECTS: makes a game with allies and enemies
     //          forms a gameboard with dimensions allies.size() or enemies.size() + 3, depending which is larger
     //          creates a turn order for game based off speed, then set current character to the first character in the turn order
     public MokeGame(ArrayList<Character> allies, ArrayList<Character> enemies) {
-        
+        MokeGame.allies = allies;
+        MokeGame.enemies = enemies;
+        if (allies.size() >= enemies.size()) {
+            gameboard = new Gameboard(allies.size() + 3, allies.size() + 3);
+        } else {
+            gameboard = new Gameboard(enemies.size() + 3, enemies.size() + 3);
+        }
+        turnOrder = makeTurnOrder();
+        turnIndex = 0;
+        currentCharacter = turnOrder.get(0);
+        moved = false;
+        attacked = false;
+        movesLeft = currentCharacter.getMove();
     }
 
+    // REQUIRES: allies.size() and enemies.size() > 0
     // MODIFIES: this
     // EFFECTS: Sets the turn order based off all character's speed
     //          if tied, prioritize first character in list, prioritizing allies before enemies
     public ArrayList<Character> makeTurnOrder() {
-        return null;
+        ArrayList<Character> newTurnOrder = new ArrayList<Character>();
+        ArrayList<Character> allCharacters = new ArrayList<Character>(allies);
+        allCharacters.addAll(enemies);
+        for (Character cAdd : allCharacters) {
+            int index = 0;
+            for (Character cCompare : newTurnOrder) {
+                if (cAdd.getSpeed() > cCompare.getSpeed()) {
+                    break;
+                } else {
+                    index++;
+                }
+            }
+            newTurnOrder.add(index, cAdd);
+        }
+
+        return newTurnOrder;
     }
 
     // MODIFIES: this
@@ -42,32 +70,30 @@ public class MokeGame {
 
     }
 
-    // EFFECTS: returns all characters in range that are not itself
-    public ArrayList<Character> getInRange(Character c) {
-        ArrayList<Character> inRange = new ArrayList<Character>();
-
-        return inRange;
+    // EFFECTS: returns first alive character, starting with the current character
+    public Character findFirstAlive() {
+        return null;
     }
 
     // REQUIRES: target within range
     // MODIFIES: character
-    // EFFECTS: gets current character to attack target, set attacked = false
+    // EFFECTS: gets current character to attack target, set attacked = true
     public void attackCharacter(Character target) {
 
     }
 
     // MODIFIES: character
     // EFFECTS: moves current character in direction if valid, removes one from movesLeft
-    //          if no more left, set moved = false
+    //          if no more left, set moved = true
     //          true if valid, false if not
     public Boolean moveCharacter(String direction) {
         return false;
     }
 
-    // EFFECTS: sets moved to false and removes all from movesLeft
+    // EFFECTS: sets moved to true and removes all from movesLeft
     public void endMove() {
         movesLeft = 0;
-        moved = false;
+        moved = true;
     }
 
     // MODIFIES: this
@@ -82,17 +108,17 @@ public class MokeGame {
     }
 
     // EFFECTS: returns list of all allies
-    public ArrayList<Character> getAllies() {
+    public static ArrayList<Character> getAllies() {
         return allies;
     }
 
     // EFFECTS: returns list of all enemies
-    public ArrayList<Character> getEnemies() {
+    public static ArrayList<Character> getEnemies() {
         return enemies;
     }
 
     // EFFECTS: returns turn order
-    public ArrayList<Character> getTurnOrder() {
+    public static ArrayList<Character> getTurnOrder() {
         return turnOrder;
     }
 

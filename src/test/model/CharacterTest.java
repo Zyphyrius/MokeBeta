@@ -4,25 +4,41 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class CharacterTest {
     Character c1;
     Character c2;
-    Gameboard g1;
+    Character c3;
+    ArrayList<Character> allies;
+    ArrayList<Character> enemies;
+    Gameboard g;
+    MokeGame mg;
+    
+
 
     @BeforeEach
     void runBefore() {
-        c1 = new testCharacter("A", 100, 10, 2, 2, 2, "a dude", 0, 0);
+        c1 = new testCharacter("A", 100, 10, 4, 2, 2, "a dude", 0, 0);
         c2 = new testCharacter("B", 100, 110, 1, 2, 1, "strong", 4, 4);
+        c3 = new testCharacter("C", 100, 30, 2, 2, 1, "normal", 3, 3);
+        allies = new ArrayList<Character>();
+        enemies = new ArrayList<Character>();
+        allies.add(c1);
+        allies.add(c3);
+        enemies.add(c2);
+        mg = new MokeGame(allies, enemies);
     }
 
     @Test
     void testConstructor() {
         assertEquals("A", c1.getName());
         assertEquals(100, c1.getHealth());
-        assertEquals(2, c1.getRange());
+        assertEquals(4, c1.getRange());
         assertEquals(2, c1.getSpeed());
         assertEquals(2, c1.getMove());
         assertEquals("a dude", c1.getAbility());
@@ -72,6 +88,15 @@ public class CharacterTest {
         c2.attack(c1);
         assertEquals(80, c2.getHealth());
         assertEquals(0, c1.getHealth());
+    }
+
+    @Test
+    void testGetInRange() {
+        assertEquals(c1.getInRange(new NoFilter()), List.of(c3, c2));
+        assertEquals(c1.getInRange(new EnemyFilter()), List.of(c2));
+        assertEquals(c1.getInRange(new AllyFilter()), List.of(c3));
+        assertEquals(c2.getInRange(new AllyFilter()), List.of(c3));
+        assertEquals(c3.getInRange(new NoFilter()), List.of(c2));
     }
 
     @Test
