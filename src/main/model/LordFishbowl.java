@@ -11,7 +11,7 @@ public class LordFishbowl extends Character{
         this.setRange(2);
         this.setSpeed(40);
         this.setMove(2);
-        this.setAbility("Can attack twice. \nCan't be hurt by enemies outside his range");
+        this.setAbility("Can attack twice. \n\tCan't be hurt by enemies outside his range");
     }
 
     // MODIFIES: this

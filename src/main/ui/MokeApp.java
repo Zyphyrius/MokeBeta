@@ -32,7 +32,7 @@ public class MokeApp {
         while(!game.isGameOver()) {
             printBoard();
             printList(charactersToNames(MokeGame.getTurnOrder()));
-            System.out.println("It's " + game.getCurrentCharacter().getName() + 
+            System.out.println("\nIt's " + game.getCurrentCharacter().getName() + 
             "'s turn!\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
             command = input.nextInt();
             handleTurn(command);
@@ -61,7 +61,7 @@ public class MokeApp {
                     game.setGameOver(false);
                     break;
                 default:
-                    System.out.println("Invalid input");
+                    System.out.println("Invalid input\n");
                     break;
             }
     }
@@ -73,18 +73,21 @@ public class MokeApp {
             System.out.println("\nYou have " + Integer.toString(game.getCurrentCharacter().getAttacksLeft()) + " attacks left\n\t0. Back");
             ArrayList<Character> inRange = game.getCurrentCharacter().getInRange(game.getCurrentCharacter().getAttackFilter());
             if (inRange.isEmpty()) {
-                System.out.println("no one in range...");
+                System.out.println("\tno one in range...\n");
             } else {
                 printList(charactersToNames(inRange));
             }
             attackCommand = input.nextInt();
             if (attackCommand > 0 & attackCommand <= inRange.size()) {
-                game.attackCharacter(inRange.get(attackCommand));
+                Character target = inRange.get(attackCommand-1);
+                int prevHP = target.getHealth();
+                game.attackCharacter(target);
+                System.out.println(target.getName() + " took " + Integer.toString(prevHP - target.getHealth()) + " damage!\n");
             } else if (attackCommand != 0) {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input\n");
             }
         } else {
-            System.out.println("No more attacks left!");
+            System.out.println("No more attacks left!\n");
         }
     }
 
@@ -97,7 +100,7 @@ public class MokeApp {
             moveCommand = input.nextInt();
             game.moveCharacter(handleDirection(moveCommand));
         } else {
-            System.out.println("No more moves left!");
+            System.out.println("No more moves left!\n");
         }
     }
 
@@ -115,7 +118,7 @@ public class MokeApp {
                 case 4:
                     return "right";
                 default:
-                    System.out.println("Invalid input");
+                    System.out.println("Invalid input\n");
                     break;
             }
         return "";
@@ -123,13 +126,21 @@ public class MokeApp {
 
     // EFFECTS: shows all characters then views the one inputted
     private void handleView() {
-        System.out.println("Who do you want to view?");
+        int viewCommand;
+        System.out.println("Who do you want to view?\n\t0. Back");
+        printList(charactersToNames(MokeGame.getTurnOrder()));
+        viewCommand = input.nextInt();
+        if (viewCommand > 0 & viewCommand <= MokeGame.getTurnOrder().size()) {
+            view(MokeGame.getTurnOrder().get(viewCommand-1));
+        } else if (viewCommand != 0) {
+            System.out.println("Invalid input\n");
+        }
     }
 
     // EFFECTS: views a character and prints all relevant info on them
     private void view(Character c) {
         System.out.println(c.getName() + ":\nhp:" + c.getHealth() + "/" + c.getMaxHealth() + "\natk: " + c.getAttack() + "\nrange: " 
-        + c.getRange() + "\nmoves: " + c.getMove() + "\nspd: " + c.getSpeed() + "\nability:" + c.getAbility());
+        + c.getRange() + "\nmoves: " + c.getMove() + "\nspd: " + c.getSpeed() + "\nability:" + c.getAbility() + "\n");
     }
 
     // EFFECTS: gives a finishing prompt after the game is over
@@ -150,12 +161,12 @@ public class MokeApp {
         System.out.println("Welcome to MOKE!\n\n");
         allies = inputAllies();
         if (allies.isEmpty()) {
-            System.out.println("You fool you didn't add a character! You get Lord Fishbowl");
+            System.out.println("You fool you didn't add a character! You get Lord Fishbowl\n");
             allies.add(new LordFishbowl());
         }
         enemies = inputEnemies();
         if (enemies.isEmpty()) {
-            System.out.println("You fool you didn't add a character! You get Murky Water Cultist");
+            System.out.println("You fool you didn't add a character! You get Murky Water Cultist\n");
             enemies.add(new MWCultist());
         }
         game = new MokeGame(allies, enemies);
@@ -175,7 +186,7 @@ public class MokeApp {
             } else if (command == 0) {
                 stillSelecting = false;
             } else {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input\n");
             }
         }
         return allies;
@@ -199,7 +210,7 @@ public class MokeApp {
         boolean stillSelecting = true;
         ArrayList<Character> enemies = new ArrayList<Character>();
         while (stillSelecting) {
-            System.out.println("Please select your enemies:\n\t0. Done with adding enemies");
+            System.out.println("Please select your enemies:\n\t0. Done with adding enemies\n");
             printList(allEnemies);
             command = input.nextInt();
             if (command <= allEnemies.size() & command > 0) {
@@ -207,7 +218,7 @@ public class MokeApp {
             } else if (command == 0) {
                 stillSelecting = false;
             } else {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input\n");
             }
         }
         return enemies;
