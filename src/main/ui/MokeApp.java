@@ -9,17 +9,21 @@ import java.util.Scanner;
 
 import model.Character;
 import model.Gameboard;
+import model.HotMould;
 import model.LordFishbowl;
 import model.MWCultist;
+import model.MWTrooper;
 
 public class MokeApp {
     private Scanner input = new Scanner(System.in);
     private int command;
     private MokeGame game;
-    private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl"));
-    private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist"));
+    private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
+                "Hot Mould"));
+    private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
+                "Murky Water Trooper"));
     
-    // EFFECTS: runs the best game ever (moke)
+    // EFFECTS: runs the best game ever (moke) and handles all inputs
     public MokeApp() {
         runMoke();
     }
@@ -29,11 +33,13 @@ public class MokeApp {
     private void runMoke() {
         inputCharacters();
         game.startBoard();
-        while(!game.isGameOver()) {
+        numberCharacters();
+        while (!game.isGameOver()) {
             printBoard();
+            System.out.println("\nTurn Order:");
             printList(charactersToNames(MokeGame.getTurnOrder()));
-            System.out.println("\nIt's " + game.getCurrentCharacter().getName() + 
-            "'s turn!\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
+            System.out.println("\nIt's " + game.getCurrentCharacter().getName()
+                    + "'s turn!\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
             command = input.nextInt();
             handleTurn(command);
             game.checkDead();
@@ -45,44 +51,46 @@ public class MokeApp {
     // EFFECTS: handles the command and performs the turn action
     private void handleTurn(int command) {
         switch (command) {
-                case 1:
-                    handleAttack();
-                    break;
-                case 2:
-                    handleMove();
-                    break;
-                case 3:
-                    handleView();
-                    break;
-                case 4:
-                    game.nextTurn();
-                    break;
-                case 5:
-                    game.setGameOver(false);
-                    break;
-                default:
-                    System.out.println("Invalid input\n");
-                    break;
-            }
+            case 1:
+                handleAttack();
+                break;
+            case 2:
+                handleMove();
+                break;
+            case 3:
+                handleView();
+                break;
+            case 4:
+                game.nextTurn();
+                break;
+            case 5:
+                game.setGameOver(false);
+                break;
+            default:
+                System.out.println("Invalid input\n");
+                break;
+        }
     }
 
     // EFFECTS: finds all attackers in range, then attacks inputted target. will go back if no more attacks
     private void handleAttack() {
         if (game.getCurrentCharacter().getAttacksLeft() > 0) {
-            int attackCommand;
-            System.out.println("\nYou have " + Integer.toString(game.getCurrentCharacter().getAttacksLeft()) + " attacks left\n\t0. Back");
-            ArrayList<Character> inRange = game.getCurrentCharacter().getInRange(game.getCurrentCharacter().getAttackFilter());
+            System.out.println("\nYou have " + Integer.toString(game.getCurrentCharacter().getAttacksLeft())
+                    + " attacks left\n\t0. Back");
+            ArrayList<Character> inRange = 
+                    game.getCurrentCharacter().getInRange(game.getCurrentCharacter().getAttackFilter());
             if (inRange.isEmpty()) {
                 System.out.println("\tno one in range...\n");
             } else {
                 printList(charactersToNames(inRange));
             }
-            attackCommand = input.nextInt();
+            int attackCommand = input.nextInt();
             if (attackCommand > 0 & attackCommand <= inRange.size()) {
-                Character target = inRange.get(attackCommand-1);
+                Character target = inRange.get(attackCommand - 1);
                 int prevHP = target.getHealth();
                 game.attackCharacter(target);
-                System.out.println(target.getName() + " took " + Integer.toString(prevHP - target.getHealth()) + " damage!\n");
+                System.out.println(target.getName() + " went from " + Integer.toString(prevHP) 
+                        + " to " + Integer.toString(target.getHealth()) + " hp!\n");
             } else if (attackCommand != 0) {
                 System.out.println("Invalid input\n");
             }
@@ -95,10 +103,12 @@ public class MokeApp {
     private void handleMove() {
         if (game.getCurrentCharacter().getMovesLeft() > 0) {
             int moveCommand;
-            System.out.println("You have " + Integer.toString(game.getCurrentCharacter().getMovesLeft()) + " moves left\n\t0. Back"
-            + "\n\t1. up\n\t2. down\n\t3. left\n\t4. right");
+            System.out.println("You have " + Integer.toString(game.getCurrentCharacter().getMovesLeft()) 
+                    + " moves left\n\t0. Back" + "\n\t1. up\n\t2. down\n\t3. left\n\t4. right");
             moveCommand = input.nextInt();
-            game.moveCharacter(handleDirection(moveCommand));
+            if (!game.moveCharacter(handleDirection(moveCommand))) {
+                System.out.println("Invalid spot\n");
+            }
         } else {
             System.out.println("No more moves left!\n");
         }
@@ -107,20 +117,20 @@ public class MokeApp {
     // EFFECTS: returns direction corresponding to player's input
     private String handleDirection(int moveCommand) {
         switch (moveCommand) {
-                case 0:
-                    break;
-                case 1:
-                    return "up";
-                case 2:
-                    return "down";
-                case 3:
-                    return "left";
-                case 4:
-                    return "right";
-                default:
-                    System.out.println("Invalid input\n");
-                    break;
-            }
+            case 0:
+                break;
+            case 1:
+                return "up";
+            case 2:
+                return "down";
+            case 3:
+                return "left";
+            case 4:
+                return "right";
+            default:
+                System.out.println("Invalid input\n");
+                break;
+        }
         return "";
     }
 
@@ -131,7 +141,7 @@ public class MokeApp {
         printList(charactersToNames(MokeGame.getTurnOrder()));
         viewCommand = input.nextInt();
         if (viewCommand > 0 & viewCommand <= MokeGame.getTurnOrder().size()) {
-            view(MokeGame.getTurnOrder().get(viewCommand-1));
+            view(MokeGame.getTurnOrder().get(viewCommand - 1));
         } else if (viewCommand != 0) {
             System.out.println("Invalid input\n");
         }
@@ -139,8 +149,9 @@ public class MokeApp {
 
     // EFFECTS: views a character and prints all relevant info on them
     private void view(Character c) {
-        System.out.println(c.getName() + ":\nhp:" + c.getHealth() + "/" + c.getMaxHealth() + "\natk: " + c.getAttack() + "\nrange: " 
-        + c.getRange() + "\nmoves: " + c.getMove() + "\nspd: " + c.getSpeed() + "\nability:" + c.getAbility() + "\n");
+        System.out.println(c.getName() + ":\nhp:" + c.getHealth() + "/" + c.getMaxHealth() + "\natk: " 
+                + c.getAttack() + "\nrange: " + c.getRange() + "\nmoves: " + c.getMove() + "\nspd: " 
+                + c.getSpeed() + "\nability:" + c.getAbility() + "\n");
     }
 
     // EFFECTS: gives a finishing prompt after the game is over
@@ -195,10 +206,12 @@ public class MokeApp {
     // REQUIRES: index <= allAllies.size()
     // EFFECTS: returns which ally should be added
     private Character inputAlly(int index) {
-        String allyName = allAllies.get(index-1);
+        String allyName = allAllies.get(index - 1);
         switch (allyName) {
             case "Lord Fishbowl":
                 return new LordFishbowl();
+            case "Hot Mould":
+                return new HotMould();
             default:
                 return null;
         }
@@ -210,7 +223,7 @@ public class MokeApp {
         boolean stillSelecting = true;
         ArrayList<Character> enemies = new ArrayList<Character>();
         while (stillSelecting) {
-            System.out.println("Please select your enemies:\n\t0. Done with adding enemies\n");
+            System.out.println("Please select your enemies:\n\t0. Done with adding enemies");
             printList(allEnemies);
             command = input.nextInt();
             if (command <= allEnemies.size() & command > 0) {
@@ -227,10 +240,12 @@ public class MokeApp {
     // REQUIRES: index <= allEnemies.size()
     // EFFECTS: returns which enemy should be added
     private Character inputEnemy(int index) {
-        String enemyName = allEnemies.get(index-1);
+        String enemyName = allEnemies.get(index - 1);
         switch (enemyName) {
             case "Murky Water Cultist":
                 return new MWCultist();
+            case "Murky Water Trooper":
+                return new MWTrooper();
             default:
                 return null;
         }
@@ -268,4 +283,26 @@ public class MokeApp {
         }
         System.out.println(board);
     }
+
+    // MODIFIES: character
+    // EFFECTS: makes each character's name unique by adding a number at the end of their name
+    private void numberCharacters() {
+        ArrayList<String> nameHolder = new ArrayList<String>();
+        for (Character c : MokeGame.getTurnOrder()) {
+            nameHolder.add(c.getName());
+            c.setName(c.getName() + " " + Integer.toString(countRepeatNames(c.getName(), nameHolder)));
+        }
+    }
+
+    // EFFECTS: looks at a list and returns how many times the given string is found
+    private int countRepeatNames(String name, ArrayList<String> names) {
+        int count = 0;
+        for (String currentName : names) {
+            if (currentName == name) {
+                count += 1;
+            }
+        }
+        return count;
+    }
+
 }

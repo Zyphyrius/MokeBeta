@@ -17,8 +17,8 @@ public class LordFishbowlTest {
     @BeforeEach
     void runBefore() {
         lfb = new LordFishbowl();
-        c1 = new testCharacter("A", 100, 10, 2, 2, 2, "a dude", 2, 2, 1);
-        c2 = new testCharacter("B", 100, 100, 1, 2, 1, "strong", 3, 3, 1);
+        c1 = new DummyCharacter("A", 100, 10, 2, 2, 2, "a dude", 2, 2, 1);
+        c2 = new DummyCharacter("B", 100, 100, 1, 2, 1, "strong", 3, 3, 1);
         lfb.setX(0);
         lfb.setY(0);
         mg = new MokeGame(new ArrayList<Character>(List.of(lfb)), new ArrayList<Character>(List.of(c1, c2)));

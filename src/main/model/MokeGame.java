@@ -15,8 +15,10 @@ public class MokeGame {
     
     // REQUIRES: allies.size() and enemies.size() > 0
     // EFFECTS: makes a game with allies and enemies
-    //          forms a gameboard with dimensions allies.size() or enemies.size() + 3, depending which is larger
-    //          creates a turn order for game based off speed, then set current character to the first character in the turn order
+    //          forms a gameboard with dimensions allies.size() or enemies.size() + 3,
+    //          depending which is larger.
+    //          creates turn order for game based off speed, 
+    //          then set current character to the first character in the turn order
     public MokeGame(ArrayList<Character> allies, ArrayList<Character> enemies) {
         MokeGame.allies = allies;
         MokeGame.enemies = enemies;
@@ -41,16 +43,16 @@ public class MokeGame {
         ArrayList<Character> newTurnOrder = new ArrayList<Character>();
         ArrayList<Character> allCharacters = new ArrayList<Character>(allies);
         allCharacters.addAll(enemies);
-        for (Character cAdd : allCharacters) {
+        for (Character characterToAdd : allCharacters) {
             int index = 0;
-            for (Character cCompare : newTurnOrder) {
-                if (cAdd.getSpeed() > cCompare.getSpeed()) {
+            for (Character characterToCompare : newTurnOrder) {
+                if (characterToAdd.getSpeed() > characterToCompare.getSpeed()) {
                     break;
                 } else {
                     index++;
                 }
             }
-            newTurnOrder.add(index, cAdd);
+            newTurnOrder.add(index, characterToAdd);
         }
 
         return newTurnOrder;
@@ -70,7 +72,8 @@ public class MokeGame {
     }
 
     // MODIFIES: character, gameboard
-    // EFFECTS: initializes game by placing all enemies in the top left and all allies in the bottom right and setting their x,y values
+    // EFFECTS: initializes game by placing all enemies in the top left 
+    //      and all allies in the bottom right and setting their x,y values
     public void startBoard() {
         for (Character enemy : enemies) {
             gameboard.placeCharacter(enemies.indexOf(enemy), 0, enemy);
@@ -78,14 +81,16 @@ public class MokeGame {
             enemy.setY(0);
         }
         for (Character ally : allies) {
-            gameboard.placeCharacter(gameboard.getRowLength() -1 - allies.indexOf(ally), gameboard.getColumnLength()-1, ally);
+            gameboard.placeCharacter(gameboard.getRowLength() - 1 - allies.indexOf(ally),
+                                     gameboard.getColumnLength() - 1, ally);
             ally.setX(gameboard.getRowLength() - 1 - allies.indexOf(ally));
             ally.setY(gameboard.getColumnLength() - 1);
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: removes all dead characters from allies, enemies, turn order, and gameboard then change turnIndex accordingly, then checks if won/lost
+    // EFFECTS: removes all dead characters from allies, enemies, turn order, 
+    //          and gameboard then change turnIndex accordingly, then checks if won/lost
     public void checkDead() {
         Character firstAlive = findFirstAlive();
         AliveFilter aliveFilter = new AliveFilter();
@@ -93,7 +98,7 @@ public class MokeGame {
         enemies = aliveFilter.characterFilter(enemies);
         gameboard.clearDeadCharacterTiles();
         checkGameOver();
-        if (!gameOver){
+        if (!gameOver) {
             turnOrder = makeTurnOrder();
             turnIndex = turnOrder.indexOf(firstAlive);
             currentCharacter = turnOrder.get(turnIndex);
@@ -103,7 +108,7 @@ public class MokeGame {
     // EFFECTS: returns first alive character, starting with the current character
     public Character findFirstAlive() {
         int tempTurnIndex = turnIndex;
-        for (int i=0; i < turnOrder.size(); i++) {
+        for (int i = 0; i < turnOrder.size(); i++) {
             if (!turnOrder.get(tempTurnIndex).isDead()) {
                 break;
             }
@@ -140,7 +145,7 @@ public class MokeGame {
     public Boolean moveCharacter(String direction) {
         int newX = currentCharacter.getX();
         int newY = currentCharacter.getY();
-        Runnable moveDirection = () -> {};
+        Runnable moveDirection = null;
         if (direction.toLowerCase().equals("up")) {
             newY -= 1;
             moveDirection = () -> currentCharacter.moveUp();

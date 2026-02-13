@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-// Abstract class of a character, with all stats and standard functions
+// Abstract class of a character, with all stats and standard version of game functions
 public abstract class Character {
     private String name;
     private int maxHealth;
@@ -13,11 +13,11 @@ public abstract class Character {
     private int speed;
     private int move;
     private String ability;
-    private int xPos;
-    private int yPos;
+    private int cordX;
+    private int cordY;
     private int attacksLeft;
     private int movesLeft;
-    //private ArrayList<String> states;
+    private CharacterFilter charFilter;
 
     // MODIFIES: this
     // EFFECTS: lose health equal to damage, if damage <= 0, do nothing
@@ -32,6 +32,7 @@ public abstract class Character {
         }
     }
 
+    // REQUIRES: healing >= 0
     // MODIFIES: this
     // EFFECTS: increase health by healing, health can't exceed max health
     //          can't heal someone who is dead
@@ -53,7 +54,8 @@ public abstract class Character {
         }
     }
 
-    // MODIFIES: this, target, attacksLeft > 0
+    // REQUIRES: attacksLeft > 0
+    // MODIFIES: this
     // EFFECTS: performs attack on a target and removes 1 from attacksLeft
     public void attack(Character target) {
         target.hurt(attack, this);
@@ -67,42 +69,46 @@ public abstract class Character {
         allCharacters.addAll(MokeGame.getEnemies());
         allCharacters = cf.characterFilter(allCharacters);
         for (Character c : allCharacters) {
-            if (c != this & range >= Math.abs(c.getX() - this.xPos) & range >= Math.abs(c.getY() - this.yPos)) {
+            if (c != this & range >= Math.abs(c.getX() - this.cordX) & range >= Math.abs(c.getY() - this.cordY)) {
                 inRange.add(c);
             }
         }
         return inRange;
     }
 
-    // MODIFIES: this, movesLeft > 0
+    // REQUIRES: movesLeft > 0
+    // MODIFIES: this
     // EFFECTS: moves character position coordinates up by 1
     //          and removes 1 from movesLeft
     public void moveUp() {
-        this.yPos -= 1;
+        this.cordY -= 1;
         this.movesLeft -= 1;
     }
 
-    // MODIFIES: this, movesLeft > 0
+    // REQUIRES: movesLeft > 0
+    // MODIFIES: this
     // EFFECTS: moves character position coordinates down by 1
     //          and removes 1 from movesLeft
     public void moveDown() {
-        this.yPos += 1;
+        this.cordY += 1;
         this.movesLeft -= 1;
     }
 
-    // MODIFIES: this, movesLeft > 0
+    // REQUIRES: movesLeft > 0
+    // MODIFIES: this
     // EFFECTS: moves character position coordinates right by 1
     //          and removes 1 from movesLeft
     public void moveRight() {
-        this.xPos += 1;
+        this.cordX += 1;
         this.movesLeft -= 1;
     }
 
-    // MODIFIES: this, movesLeft > 0
+    // REQUIRES: movesLeft > 0
+    // MODIFIES: this
     // EFFECTS: moves character position coordinates left by 1
     //          and removes 1 from movesLeft
     public void moveLeft() {
-        this.xPos -= 1;
+        this.cordX -= 1;
         this.movesLeft -= 1;
     }
 
@@ -117,7 +123,7 @@ public abstract class Character {
     public int getMaxHealth() {
         return maxHealth;
     }
-    
+
     public int getHealth() {
         return health;
     }
@@ -131,19 +137,19 @@ public abstract class Character {
     }
 
     public int getX() {
-        return xPos;
+        return cordX;
     }
 
-    public void setX(int xPos) {
-        this.xPos = xPos;
+    public void setX(int cordX) {
+        this.cordX = cordX;
     }
 
     public int getY() {
-        return yPos;
+        return cordY;
     }
 
-    public void setY(int yPos) {
-        this.yPos = yPos;
+    public void setY(int cordY) {
+        this.cordY = cordY;
     }
 
     public String getAbility() {
@@ -210,9 +216,11 @@ public abstract class Character {
         this.movesLeft = movesLeft;
     }
 
-    // EFFECTS: returns the type of filter the character wants on their attack. 
-    // by default always enemies unless stated in specific character
-    public CharacterFilter getAttackFilter() {
-        return new EnemyFilter();
+    public void setAttackFilter(CharacterFilter cf) {
+        charFilter = cf;
     }
- }
+
+    public CharacterFilter getAttackFilter() {
+        return charFilter;
+    }
+}

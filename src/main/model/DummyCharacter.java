@@ -1,10 +1,11 @@
 package model;
 
 // A test character with inputtable stats and used for testing
-public class testCharacter extends Character {
+public class DummyCharacter extends Character {
 
-    // EFFECTS: creates a character with given stats
-    public testCharacter(String name, int maxHealth, int attack, int range, int speed, int move, String ability, int xPos, int yPos, int attacks) {
+    // EFFECTS: creates a character with given stats and default no attack filter
+    public DummyCharacter(String name, int maxHealth, int attack, int range, int speed, int move, 
+                        String ability, int cordX, int cordY, int attacks) {
         this.setName(name);
         this.setMaxHealth(maxHealth);
         this.setHealth(maxHealth);
@@ -13,8 +14,8 @@ public class testCharacter extends Character {
         this.setSpeed(speed);
         this.setMove(move);
         this.setAbility(ability);
-        this.setX(xPos);
-        this.setY(yPos);
+        this.setX(cordY);
+        this.setY(cordY);
         this.setAttacks(attacks);
     }
 }

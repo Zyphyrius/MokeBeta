@@ -16,16 +16,16 @@ public class CharacterTest {
     Character c3;
     ArrayList<Character> allies;
     ArrayList<Character> enemies;
-    Gameboard g;
+    Gameboard gb;
     MokeGame mg;
     
 
 
     @BeforeEach
     void runBefore() {
-        c1 = new testCharacter("A", 100, 10, 4, 2, 2, "a dude", 0, 0, 1);
-        c2 = new testCharacter("B", 100, 110, 1, 2, 1, "strong", 4, 4, 1);
-        c3 = new testCharacter("C", 100, 30, 2, 2, 1, "normal", 3, 3, 1);
+        c1 = new DummyCharacter("A", 100, 10, 4, 2, 2, "a dude", 0, 0, 1);
+        c2 = new DummyCharacter("B", 100, 110, 1, 2, 1, "strong", 4, 4, 1);
+        c3 = new DummyCharacter("C", 100, 30, 2, 2, 1, "normal", 3, 3, 1);
         allies = new ArrayList<Character>();
         enemies = new ArrayList<Character>();
         allies.add(c1);
@@ -102,9 +102,11 @@ public class CharacterTest {
     @Test
     void testGetInRange() {
         assertEquals(c1.getInRange(new NoFilter()), List.of(c3, c2));
+        c1.setAttackFilter(new EnemyFilter());
         assertEquals(c1.getInRange(c1.getAttackFilter()), List.of(c2));
-        assertEquals(c1.getInRange(new AllyFilter()), List.of(c3));
-        assertEquals(c2.getInRange(new AllyFilter()), List.of(c3));
+        c1.setAttackFilter(new AllyFilter());
+        assertEquals(c1.getInRange(c1.getAttackFilter()), List.of(c3));
+        assertEquals(c2.getInRange(c1.getAttackFilter()), List.of(c3));
         assertEquals(c3.getInRange(new NoFilter()), List.of(c2));
     }
 
@@ -155,8 +157,8 @@ public class CharacterTest {
         testXY(1, 1, c1);
     }
 
-    void testXY(int xPos, int yPos, Character c) {
-        assertEquals(c.getX(), xPos);
-        assertEquals(c.getY(), yPos);
+    void testXY(int cordX, int cordY, Character c) {
+        assertEquals(c.getX(), cordX);
+        assertEquals(c.getY(), cordY);
     }
 }
