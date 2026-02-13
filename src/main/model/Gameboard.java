@@ -55,7 +55,27 @@ public class Gameboard {
         findTile(x, y).setCharacter(character);
     }
 
+    // MODIFIES: this, Tile
+    // EFFECTS: filters the tiles by removing all dead characters
+    public void clearDeadCharacterTiles() {
+        for (Tile t : tiles) {
+            if (t.getCharacter() != null) {
+                if (t.getCharacter().isDead()) {
+                    t.setCharacter(null);
+                }
+            }
+        }
+    }
+
     public ArrayList<Tile> getTiles() {
         return tiles;
+    }
+
+    public int getColumnLength() {
+        return columnLength;
+    }
+
+    public int getRowLength() {
+        return rowLength;
     }
 }

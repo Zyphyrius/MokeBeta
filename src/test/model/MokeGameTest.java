@@ -17,15 +17,14 @@ public class MokeGameTest {
     Character c4;
     ArrayList<Character> allies;
     ArrayList<Character> enemies;
-    Gameboard g;
     MokeGame mg;
 
     @BeforeEach
     void runBefore() {
-        c1 = new testCharacter("A", 100, 10, 2, 2, 2, "a dude", 0, 0);
-        c2 = new testCharacter("B", 100, 100, 1, 2, 1, "strong", 0, 1);
-        c3 = new testCharacter("C", 10, 50, 3,  4, 4, "abc", 2, 2);
-        c4 = new testCharacter("D", 20, 10, 4,  3, 3, "abc", 3, 3);
+        c1 = new testCharacter("A", 100, 10, 2, 2, 2, "a dude", 0, 0, 1);
+        c2 = new testCharacter("B", 100, 100, 1, 2, 1, "strong", 0, 1, 1);
+        c3 = new testCharacter("C", 10, 50, 3,  4, 4, "abc", 2, 2, 1);
+        c4 = new testCharacter("D", 20, 10, 4,  3, 3, "abc", 4, 4, 1);
         allies = new ArrayList<Character>();
         enemies = new ArrayList<Character>();
         allies.add(c1);
@@ -33,6 +32,7 @@ public class MokeGameTest {
         enemies.add(c2);
         enemies.add(c4);
         mg = new MokeGame(allies, enemies);
+        mg.startBoard();
     }
 
     @Test
@@ -40,6 +40,13 @@ public class MokeGameTest {
         assertEquals(MokeGame.getAllies(), allies);
         assertEquals(MokeGame.getEnemies(), enemies);
         assertEquals(mg.getGameboard().getTiles().size(), 25);
+    }
+
+    @Test 
+    void testConstructorEnemiesLarger() {
+        enemies.add(c2);
+        mg = new MokeGame(allies, enemies);
+        assertEquals(mg.getGameboard().getTiles().size(), 36);
     }
 
     @Test
@@ -54,15 +61,15 @@ public class MokeGameTest {
     @Test
     void testNextTurn() {
         assertEquals(c3, mg.getCurrentCharacter());
-        assertFalse(mg.getMoved());
+        assertTrue(mg.canMove());
         mg.endMove();
-        assertTrue(mg.getMoved());
-        assertFalse(mg.getAttacked());
+        assertFalse(mg.canMove());
+        assertTrue(mg.canAttack());
         mg.attackCharacter(c1);
-        assertTrue(mg.getAttacked());
+        assertFalse(mg.canAttack());
         mg.nextTurn();
-        assertFalse(mg.getMoved());
-        assertFalse(mg.getAttacked());
+        assertTrue(mg.canMove());
+        assertTrue(mg.canAttack());
         assertEquals(c4, mg.getCurrentCharacter());
         mg.nextTurn();
         mg.nextTurn();
@@ -72,17 +79,17 @@ public class MokeGameTest {
 
     @Test
     void testFirstAliveCharacter() {
-        c3.hurt(1000);
+        c3.hurt(1000, c1);
         assertEquals(c4, mg.findFirstAlive());
-        c2.hurt(1000);
+        c2.hurt(1000, c1);
         assertEquals(c4, mg.findFirstAlive());
     }
 
     @Test
     void testFirstAliveCharacterStartLastIndex() {
         mg.setCurrentCharacter(c2);
-        c2.hurt(1000);
-        c3.hurt(1000);
+        c2.hurt(1000, c1);
+        c3.hurt(1000, c1);
         assertEquals(c4, mg.findFirstAlive());
     }
 
@@ -93,9 +100,9 @@ public class MokeGameTest {
         assertEquals(MokeGame.getAllies(), allies);
         assertEquals(MokeGame.getEnemies(), enemies);
         assertEquals(mg.getCurrentCharacter(), c1);
-        c1.hurt(100);
-        c4.hurt(100);
-        c2.hurt(1);
+        c1.hurt(100, c1);
+        c4.hurt(100, c1);
+        c2.hurt(1, c1);
         mg.checkDead();
         assertEquals(1, MokeGame.getAllies().size());
         assertEquals(c3, MokeGame.getAllies().get(0));
@@ -110,10 +117,10 @@ public class MokeGameTest {
     void testCheckDeadWin() {
         mg.checkDead();
         assertFalse(mg.isGameOver());
-        c2.hurt(1000);
+        c2.hurt(1000, c1);
         mg.checkDead();
         assertFalse(mg.isGameOver());
-        c4.hurt(1000);
+        c4.hurt(1000, c1);
         mg.checkDead();
         assertTrue(mg.isGameOver());
         assertTrue(mg.didWin());
@@ -121,13 +128,13 @@ public class MokeGameTest {
 
     @Test
     void testCheckDeadLoss() {
-        c1.hurt(1000);
-        c2.hurt(1000);
-        c3.hurt(1000);
+        c1.hurt(1000, c1);
+        c2.hurt(1000, c1);
+        c3.hurt(1000, c1);
         mg.checkDead();
         assertTrue(mg.isGameOver());
         assertFalse(mg.didWin());
-        c4.hurt(1000);
+        c4.hurt(1000, c1);
         mg.checkDead();
         assertTrue(mg.isGameOver());
         assertFalse(mg.didWin());
@@ -143,14 +150,64 @@ public class MokeGameTest {
 
     @Test
     void testAttackCharacter() {
-        assertFalse(mg.getAttacked());
+        assertTrue(mg.canAttack());
         mg.attackCharacter(c2);
         assertEquals(50, c2.getHealth());
-        assertTrue(mg.getAttacked());
+        assertFalse(mg.canAttack());
     }
 
-    void testXY(int xPos, int yPos, Character c) {
-        assertEquals(c.getX(), xPos);
-        assertEquals(c.getY(), yPos);
+    @Test
+    void testStartBoard() {
+        assertEquals(c2, mg.getGameboard().findTile(0, 0).getCharacter());
+        assertEquals(c4, mg.getGameboard().findTile(1, 0).getCharacter());
+        assertEquals(c1, mg.getGameboard().findTile(4, 4).getCharacter());
+        assertEquals(c3, mg.getGameboard().findTile(3, 4).getCharacter());
+    }
+
+    @Test
+    void testMoveUp() {
+        testMoveInstance("up", false, 0, 0, c2);
+        testMoveInstance("up", true, 3, 3, c3);
+    }
+
+    @Test
+    void testMoveDown() {
+        testMoveInstance("down", false, 4, 4, c1);
+        testMoveInstance("down", true, 1, 1, c4);
+    }
+
+    @Test
+    void testMoveLeft() {
+        testMoveInstance("left", false, 0, 0, c2);
+        testMoveInstance("left", false, 1, 0, c4);
+        testMoveInstance("left", true, 2, 4, c3);
+    }
+
+    @Test
+    void testMoveRight() {
+        testMoveInstance("right", false, 0, 0, c2);
+        testMoveInstance("right", false, 4, 4, c1);
+        testMoveInstance("right", true, 2, 0, c4); 
+    }
+
+    @Test
+    void testCapsMoveAllOver() {
+        testMoveInstance("UP", true, 4, 3, c1);
+        testMoveInstance("UP", true, 4, 2, c1);
+        testMoveInstance("YUP", false, 4, 2, c1);
+        testMoveInstance("LEFT", true, 3, 2, c1);
+        testMoveInstance("RIGHT", true, 4, 2, c1);
+        testMoveInstance("RIGHT", false, 4, 2, c1);
+        testMoveInstance("DOWN", true, 4, 3, c1);
+    }
+
+    void testMoveInstance(String direction, boolean valid, int endX, int endY, Character c) {
+        mg.setCurrentCharacter(c);
+        if (valid) {
+            assertTrue(mg.moveCharacter(direction));
+        } else {
+            assertFalse(mg.moveCharacter(direction));
+        }
+        assertEquals(c, mg.getGameboard().findTile(endX, endY).getCharacter());
     }
 }

@@ -9,9 +9,6 @@ public class MokeGame {
     private static ArrayList<Character> turnOrder;
     private Character currentCharacter;
     private Gameboard gameboard;
-    private boolean moved;
-    private int movesLeft;
-    private boolean attacked;
     private int turnIndex;
     private boolean gameOver;
     private boolean win;
@@ -31,9 +28,8 @@ public class MokeGame {
         turnOrder = makeTurnOrder();
         turnIndex = 0;
         currentCharacter = turnOrder.get(0);
-        moved = false;
-        attacked = false;
-        movesLeft = currentCharacter.getMove();
+        currentCharacter.setMovesLeft(currentCharacter.getMove());
+        currentCharacter.setAttacksLeft(currentCharacter.getAttacks());
         gameOver = false;
     }
 
@@ -69,18 +65,33 @@ public class MokeGame {
             turnIndex = 0;
         }
         currentCharacter = turnOrder.get(turnIndex);
-        moved = false;
-        attacked = false;
-        movesLeft = currentCharacter.getMove();
+        currentCharacter.setMovesLeft(currentCharacter.getMove());
+        currentCharacter.setAttacksLeft(currentCharacter.getAttacks());
+    }
+
+    // MODIFIES: character, gameboard
+    // EFFECTS: initializes game by placing all enemies in the top left and all allies in the bottom right and setting their x,y values
+    public void startBoard() {
+        for (Character enemy : enemies) {
+            gameboard.placeCharacter(enemies.indexOf(enemy), 0, enemy);
+            enemy.setX(enemies.indexOf(enemy));
+            enemy.setY(0);
+        }
+        for (Character ally : allies) {
+            gameboard.placeCharacter(gameboard.getRowLength() -1 - allies.indexOf(ally), gameboard.getColumnLength()-1, ally);
+            ally.setX(gameboard.getRowLength() - 1 - allies.indexOf(ally));
+            ally.setY(gameboard.getColumnLength() - 1);
+        }
     }
 
     // MODIFIES: this
-    // EFFECTS: removes all dead characters from allies, enemies, and turn order, then change turnIndex accordingly, then checks if won/lost
+    // EFFECTS: removes all dead characters from allies, enemies, turn order, and gameboard then change turnIndex accordingly, then checks if won/lost
     public void checkDead() {
         Character firstAlive = findFirstAlive();
         AliveFilter aliveFilter = new AliveFilter();
         allies = aliveFilter.characterFilter(allies);
         enemies = aliveFilter.characterFilter(enemies);
+        gameboard.clearDeadCharacterTiles();
         checkGameOver();
         if (!gameOver){
             turnOrder = makeTurnOrder();
@@ -119,24 +130,41 @@ public class MokeGame {
 
     // REQUIRES: target within range
     // MODIFIES: character
-    // EFFECTS: gets current character to attack target, set attacked = true
+    // EFFECTS: gets current character to attack target
     public void attackCharacter(Character target) {
-        attacked = true;
         currentCharacter.attack(target);
     }
 
-    // MODIFIES: character
-    // EFFECTS: moves current character in direction if valid, removes one from movesLeft
-    //          if no more left, set moved = true
-    //          true if valid, false if not
+    // MODIFIES: character, gameboard
+    // EFFECTS: moves current character in direction if valid, then places on gameboard. true if valid, false if not
     public Boolean moveCharacter(String direction) {
+        int newX = currentCharacter.getX();
+        int newY = currentCharacter.getY();
+        Runnable moveDirection = () -> {};
+        if (direction.toLowerCase().equals("up")) {
+            newY -= 1;
+            moveDirection = () -> currentCharacter.moveUp();
+        } else if (direction.toLowerCase().equals("down")) {
+            newY += 1;
+            moveDirection = () -> currentCharacter.moveDown();
+        } else if (direction.toLowerCase().equals("left")) {
+            newX -= 1;
+            moveDirection = () -> currentCharacter.moveLeft();
+        } else if (direction.toLowerCase().equals("right")) {
+            newX += 1;
+            moveDirection = () -> currentCharacter.moveRight();
+        }
+        if (gameboard.validTile(newX, newY)) {
+            moveDirection.run();
+            gameboard.placeCharacter(newX, newY, currentCharacter);
+            return true;
+        }
         return false;
     }
 
     // EFFECTS: sets moved to true and removes all from movesLeft
     public void endMove() {
-        movesLeft = 0;
-        moved = true;
+        currentCharacter.setMovesLeft(0);
     }
 
     // MODIFIES: this
@@ -170,24 +198,20 @@ public class MokeGame {
         return gameboard;
     }
 
-    public Boolean getAttacked() {
-        return attacked;
-    }
-
-    public Boolean getMoved() {
-        return moved;
-    }
-
-    public int getMovesLeft() {
-        return movesLeft;
-    }
-
     public boolean isGameOver() {
         return gameOver;
     }
 
     public boolean didWin() {
         return win;
+    }
+
+    public boolean canAttack() {
+        return currentCharacter.getAttacksLeft() > 0;
+    }
+
+    public boolean canMove() {
+        return currentCharacter.getMovesLeft() > 0;
     }
     
 }

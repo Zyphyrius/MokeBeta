@@ -8,24 +8,26 @@ public abstract class Character {
     private int maxHealth;
     private int health;
     private int attack;
+    private int attacks;
     private int range;
     private int speed;
     private int move;
     private String ability;
     private int xPos;
     private int yPos;
+    private int attacksLeft;
+    private int movesLeft;
     //private ArrayList<String> states;
 
     // MODIFIES: this
     // EFFECTS: lose health equal to damage, if damage <= 0, do nothing
     //          if damage >= health, set health to 0
-    public void hurt(int damage) {
+    public void hurt(int damage, Character attacker) {
         if (damage > 0) {
             if (damage >= health) {
                 this.health = 0;
             } else {
                 this.health -= damage;
-
             }
         }
     }
@@ -51,10 +53,11 @@ public abstract class Character {
         }
     }
 
-    // MODIFIES: target
-    // EFFECTS: performs attack on a target
+    // MODIFIES: this, target, attacksLeft > 0
+    // EFFECTS: performs attack on a target and removes 1 from attacksLeft
     public void attack(Character target) {
-        target.hurt(attack);
+        target.hurt(attack, this);
+        attacksLeft -= 1;
     }
 
     // EFFECTS: returns all characters in range that are not itself with specified filter
@@ -71,28 +74,36 @@ public abstract class Character {
         return inRange;
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, movesLeft > 0
     // EFFECTS: moves character position coordinates up by 1
+    //          and removes 1 from movesLeft
     public void moveUp() {
         this.yPos -= 1;
+        this.movesLeft -= 1;
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, movesLeft > 0
     // EFFECTS: moves character position coordinates down by 1
+    //          and removes 1 from movesLeft
     public void moveDown() {
         this.yPos += 1;
+        this.movesLeft -= 1;
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, movesLeft > 0
     // EFFECTS: moves character position coordinates right by 1
+    //          and removes 1 from movesLeft
     public void moveRight() {
         this.xPos += 1;
+        this.movesLeft -= 1;
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, movesLeft > 0
     // EFFECTS: moves character position coordinates left by 1
+    //          and removes 1 from movesLeft
     public void moveLeft() {
         this.xPos -= 1;
+        this.movesLeft -= 1;
     }
 
     public String getName() {
@@ -147,6 +158,14 @@ public abstract class Character {
         this.attack = attack;
     }
 
+    public int getAttacks() {
+        return attacks;
+    }
+    
+    public void setAttacks(int attacks) {
+        this.attacks = attacks;
+    }
+
     public int getSpeed() {
         return speed;
     }
@@ -169,5 +188,21 @@ public abstract class Character {
 
     public void setRange(int range) {
         this.range = range;
+    }
+
+    public int getAttacksLeft() {
+        return attacksLeft;
+    }
+
+    public void setAttacksLeft(int attacksLeft) {
+        this.attacksLeft = attacksLeft;
+    }
+
+    public int getMovesLeft() {
+        return movesLeft;
+    }
+
+    public void setMovesLeft(int movesLeft) {
+        this.movesLeft = movesLeft;
     }
  }

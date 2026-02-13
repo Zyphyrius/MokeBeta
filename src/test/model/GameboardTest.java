@@ -11,14 +11,12 @@ import org.junit.jupiter.api.Test;
 public class GameboardTest {
     Character c1;
     Character c2;
-    Character c3;
-    Character c4;
     Gameboard g;
 
     @BeforeEach
     void runBefore() {
-        c1 = new testCharacter("A", 100, 10, 2, 2, 2, "a dude", 0, 0);
-        c2 = new testCharacter("B", 100, 100, 1, 2, 1, "strong", 0, 0);
+        c1 = new testCharacter("A", 100, 10, 2, 2, 2, "a dude", 0, 0, 1);
+        c2 = new testCharacter("B", 100, 100, 1, 2, 1, "strong", 0, 0, 1);
         g = new Gameboard(5, 5);
     }
 
@@ -57,5 +55,16 @@ public class GameboardTest {
         assertFalse(g.validTile(-5, -2));
     }
 
-
+    @Test
+    void testClearDeadCharacterTiles() {
+        g.placeCharacter(0, 0, c1);
+        g.placeCharacter(1, 2, c2);
+        g.clearDeadCharacterTiles();
+        assertEquals(c1, g.getTiles().get(0).getCharacter());
+        assertEquals(c2, g.getTiles().get(11).getCharacter());
+        c1.hurt(1000, c1);
+        g.clearDeadCharacterTiles();
+        assertEquals(null, g.getTiles().get(0).getCharacter());
+        assertEquals(c2, g.getTiles().get(11).getCharacter());
+    }
 }
