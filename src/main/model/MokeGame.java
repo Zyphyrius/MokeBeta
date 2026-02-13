@@ -174,6 +174,12 @@ public class MokeGame {
         turnIndex = turnOrder.indexOf(c);
     }
 
+    // EFFECTS: sets gameover to true and sets win/loss
+    public void setGameOver(boolean win) {
+        gameOver = true;
+        this.win = win;
+    }
+
     public int getTurnIndex() {
         return turnIndex;
     }

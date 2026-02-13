@@ -114,6 +114,10 @@ public abstract class Character {
         this.name = name;
     }
 
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+    
     public int getHealth() {
         return health;
     }
@@ -204,5 +208,11 @@ public abstract class Character {
 
     public void setMovesLeft(int movesLeft) {
         this.movesLeft = movesLeft;
+    }
+
+    // EFFECTS: returns the type of filter the character wants on their attack. 
+    // by default always enemies unless stated in specific character
+    public CharacterFilter getAttackFilter() {
+        return new EnemyFilter();
     }
  }

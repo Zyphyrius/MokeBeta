@@ -28,6 +28,10 @@ public class LordFishbowlTest {
     void testHurtInRange() {
         lfb.hurt(10, c1);
         assertEquals(90, lfb.getHealth());
+        lfb.hurt(-5, c1);
+        assertEquals(90, lfb.getHealth());
+        lfb.hurt(100, c1);
+        assertEquals(0, lfb.getHealth());
     }
 
     @Test

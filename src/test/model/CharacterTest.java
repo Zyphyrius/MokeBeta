@@ -38,6 +38,7 @@ public class CharacterTest {
     void testConstructor() {
         assertEquals("A", c1.getName());
         assertEquals(100, c1.getHealth());
+        assertEquals(100, c1.getMaxHealth());
         assertEquals(10, c1.getAttack());
         assertEquals(4, c1.getRange());
         assertEquals(2, c1.getSpeed());
@@ -101,7 +102,7 @@ public class CharacterTest {
     @Test
     void testGetInRange() {
         assertEquals(c1.getInRange(new NoFilter()), List.of(c3, c2));
-        assertEquals(c1.getInRange(new EnemyFilter()), List.of(c2));
+        assertEquals(c1.getInRange(c1.getAttackFilter()), List.of(c2));
         assertEquals(c1.getInRange(new AllyFilter()), List.of(c3));
         assertEquals(c2.getInRange(new AllyFilter()), List.of(c3));
         assertEquals(c3.getInRange(new NoFilter()), List.of(c2));

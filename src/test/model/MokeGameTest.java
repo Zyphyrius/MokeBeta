@@ -201,6 +201,22 @@ public class MokeGameTest {
         testMoveInstance("DOWN", true, 4, 3, c1);
     }
 
+    @Test
+    void testGameOverWin() {
+        assertFalse(mg.isGameOver());
+        mg.setGameOver(true);
+        assertTrue(mg.isGameOver());
+        assertTrue(mg.didWin());
+    }
+
+    @Test
+    void testGameOverLoss() {
+        assertFalse(mg.isGameOver());
+        mg.setGameOver(false);
+        assertTrue(mg.isGameOver());
+        assertFalse(mg.didWin());
+    }
+
     void testMoveInstance(String direction, boolean valid, int endX, int endY, Character c) {
         mg.setCurrentCharacter(c);
         if (valid) {
