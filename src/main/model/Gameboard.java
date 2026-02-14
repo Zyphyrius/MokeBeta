@@ -9,7 +9,6 @@ public class Gameboard {
     private int columnLength;
 
     // REQUIRES: rowLength and columnLength > 1
-    // MODIFIES: this
     // EFFECTS: creates a gameboard with inputted dimensions,
     //          and creates a list of tiles corresponding to the board dimensions
     public Gameboard(int rowLength, int columnLength) {
@@ -45,7 +44,7 @@ public class Gameboard {
     }
 
     // REQUIRES: x and y >= 0 and <= rowLength and columnLength, tile is valid
-    // MODIFIES: this
+    // MODIFIES: Tile
     // EFFECTS: places a character on a given tile at coordinates (x,y) 
     //          and removes character from all other tiles with that character
     public void placeCharacter(int x, int y, Character character) {
@@ -57,7 +56,7 @@ public class Gameboard {
         findTile(x, y).setCharacter(character);
     }
 
-    // MODIFIES: this, Tile
+    // MODIFIES: Tile
     // EFFECTS: filters the tiles by removing all dead characters
     public void clearDeadCharacterTiles() {
         for (Tile t : tiles) {

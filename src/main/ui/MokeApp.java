@@ -104,7 +104,7 @@ public class MokeApp {
         if (game.getCurrentCharacter().getMovesLeft() > 0) {
             int moveCommand;
             System.out.println("You have " + Integer.toString(game.getCurrentCharacter().getMovesLeft()) 
-                    + " moves left\n\t0. Back" + "\n\t1. up\n\t2. down\n\t3. left\n\t4. right");
+                    + " moves left\n\t0. Back" + "\n\t1. Up\n\t2. Down\n\t3. Left\n\t4. Right");
             moveCommand = input.nextInt();
             if (!game.moveCharacter(handleDirection(moveCommand))) {
                 System.out.println("Invalid spot\n");
@@ -149,9 +149,9 @@ public class MokeApp {
 
     // EFFECTS: views a character and prints all relevant info on them
     private void view(Character c) {
-        System.out.println(c.getName() + ":\nhp:" + c.getHealth() + "/" + c.getMaxHealth() + "\natk: " 
+        System.out.println(c.getName() + ":\nhp: " + c.getHealth() + "/" + c.getMaxHealth() + "\natk: " 
                 + c.getAttack() + "\nrange: " + c.getRange() + "\nmoves: " + c.getMove() + "\nspd: " 
-                + c.getSpeed() + "\nability:" + c.getAbility() + "\n");
+                + c.getSpeed() + "\nability: " + c.getAbility() + "\n");
     }
 
     // EFFECTS: gives a finishing prompt after the game is over

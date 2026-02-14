@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-// an instance of the game that handles all characters and turns
+// an instance of the game that handles all characters and turn actions
 public class MokeGame {
     private static ArrayList<Character> allies;
     private static ArrayList<Character> enemies;
@@ -18,7 +18,7 @@ public class MokeGame {
     //          forms a gameboard with dimensions allies.size() or enemies.size() + 3,
     //          depending which is larger.
     //          creates turn order for game based off speed, 
-    //          then set current character to the first character in the turn order
+    //          then set current character to the first character in the turn order and reset its move/attacks left
     public MokeGame(ArrayList<Character> allies, ArrayList<Character> enemies) {
         MokeGame.allies = allies;
         MokeGame.enemies = enemies;
@@ -35,9 +35,7 @@ public class MokeGame {
         gameOver = false;
     }
 
-    // REQUIRES: allies.size() and enemies.size() > 0
-    // MODIFIES: this
-    // EFFECTS: Sets the turn order based off all character's speed
+    // EFFECTS: returns the turn order based off all character's speed
     //          if tied, prioritize first character in list, prioritizing allies before enemies
     public ArrayList<Character> makeTurnOrder() {
         ArrayList<Character> newTurnOrder = new ArrayList<Character>();
@@ -59,7 +57,7 @@ public class MokeGame {
     }
 
     // MODIFIES: this
-    // EFFECTS: sets current character to next character in turn order and resets moved and attacked and movesLeft
+    // EFFECTS: sets current character to next character in turn order and resets move/attacks left
     //          when at end of turn order, return to first
     public void nextTurn() {
         turnIndex++;
@@ -71,7 +69,7 @@ public class MokeGame {
         currentCharacter.setAttacksLeft(currentCharacter.getAttacks());
     }
 
-    // MODIFIES: character, gameboard
+    // MODIFIES: character
     // EFFECTS: initializes game by placing all enemies in the top left 
     //      and all allies in the bottom right and setting their x,y values
     public void startBoard() {
@@ -134,13 +132,11 @@ public class MokeGame {
     }
 
     // REQUIRES: target within range
-    // MODIFIES: character
     // EFFECTS: gets current character to attack target
     public void attackCharacter(Character target) {
         currentCharacter.attack(target);
     }
 
-    // MODIFIES: character, gameboard
     // EFFECTS: moves current character in direction if valid, then places on gameboard. true if valid, false if not
     public Boolean moveCharacter(String direction) {
         int newX = currentCharacter.getX();
@@ -167,7 +163,7 @@ public class MokeGame {
         return false;
     }
 
-    // EFFECTS: sets moved to true and removes all from movesLeft
+    // EFFECTS: removes all from movesLeft
     public void endMove() {
         currentCharacter.setMovesLeft(0);
     }
