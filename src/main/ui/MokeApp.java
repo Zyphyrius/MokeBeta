@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.Character;
+import model.EnemyAI;
 import model.Gameboard;
 import model.HotMould;
 import model.LordFishbowl;
@@ -18,6 +19,7 @@ public class MokeApp {
     private Scanner input = new Scanner(System.in);
     private int command;
     private MokeGame game;
+    private EnemyAI enemyAI;
     private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
                 "Hot Mould"));
     private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
@@ -33,18 +35,71 @@ public class MokeApp {
     private void runMoke() {
         inputCharacters();
         game.startBoard();
+        enemyAINeeded();
         numberCharacters();
         while (!game.isGameOver()) {
             printBoard();
             System.out.println("\nTurn Order:");
             printList(charactersToNames(MokeGame.getTurnOrder()));
-            System.out.println("\nIt's " + game.getCurrentCharacter().getName()
-                    + "'s turn!\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
-            command = input.nextInt();
+            System.out.println("\nIt's " + game.getCurrentCharacter().getName() + "'s turn!\n");
+            command = getTurnInput();
             handleTurn(command);
             game.checkDead();
         }
         gameOver();
+    }
+
+    // EFFECTS: return player's turn input or enemy ais input depending on the current character and if ai is wanted
+    private int getTurnInput() {
+        if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
+            return enemyAI.determineAction(game.getCurrentCharacter());
+        } else {
+            System.out.println("\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
+            return input.nextInt();
+        }
+    }
+
+    // EFFECTS: return player's attack input or enemy ais input depending on the current character and if ai is wanted
+    private int getAttackInput(ArrayList<Character> inRange) {
+        if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
+            return enemyAI.determineAttack(game.getCurrentCharacter());
+        } else {
+            System.out.println("\nYou have " + Integer.toString(game.getCurrentCharacter().getAttacksLeft())
+                    + " attacks left\n\t0. Back");
+            if (inRange.isEmpty()) {
+                System.out.println("\tno one in range...\n");
+            } else {
+                printList(charactersToNames(inRange));
+            }
+            return input.nextInt();
+        }
+    }
+
+    // EFFECTS: return player's move input or enemy ais input depending on the current character and if ai is wanted
+    private int getMoveInput() {
+        if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
+            return enemyAI.determineMove(game.getCurrentCharacter());
+        } else {
+            System.out.println("You have " + Integer.toString(game.getCurrentCharacter().getMovesLeft()) 
+                    + " moves left\n\t0. Back" + "\n\t1. Up\n\t2. Down\n\t3. Left\n\t4. Right");
+            return input.nextInt();
+        }
+    }
+
+    // EFFECTS: creates a new enemy ai and prompts the player if they want it or not
+    private void enemyAINeeded() {
+        System.out.println("Would you like to face COM or another player?\n\t1. COM\n\t2. PLAYER\n");
+        command = input.nextInt();
+        if (command == 1) {
+            enemyAI = new EnemyAI(game, true);
+            System.out.println("Going against COM!\n");
+        } else if (command == 2) {
+            enemyAI = new EnemyAI(game, false);
+            System.out.println("Going against player!\n");
+        } else {
+            enemyAI = new EnemyAI(game, true);
+            System.out.println("Invalid response, you fight COM");
+        }
     }
 
     // MODIFIES: MokeGame
@@ -62,6 +117,8 @@ public class MokeApp {
                 break;
             case 4:
                 game.nextTurn();
+                enemyAI.setAttacked(false);
+                enemyAI.setMoved(false);
                 break;
             case 5:
                 game.setGameOver(false);
@@ -75,16 +132,9 @@ public class MokeApp {
     // EFFECTS: finds all attackers in range, then attacks inputted target. will go back if no more attacks
     private void handleAttack() {
         if (game.getCurrentCharacter().getAttacksLeft() > 0) {
-            System.out.println("\nYou have " + Integer.toString(game.getCurrentCharacter().getAttacksLeft())
-                    + " attacks left\n\t0. Back");
             ArrayList<Character> inRange = 
                     game.getCurrentCharacter().getInRange(game.getCurrentCharacter().getAttackFilter());
-            if (inRange.isEmpty()) {
-                System.out.println("\tno one in range...\n");
-            } else {
-                printList(charactersToNames(inRange));
-            }
-            int attackCommand = input.nextInt();
+            int attackCommand = getAttackInput(inRange);
             if (attackCommand > 0 & attackCommand <= inRange.size()) {
                 Character target = inRange.get(attackCommand - 1);
                 int prevHP = target.getHealth();
@@ -102,11 +152,8 @@ public class MokeApp {
     // EFFECTS: handles one instance of movement during a turn. will go back if no more moves
     private void handleMove() {
         if (game.getCurrentCharacter().getMovesLeft() > 0) {
-            int moveCommand;
-            System.out.println("You have " + Integer.toString(game.getCurrentCharacter().getMovesLeft()) 
-                    + " moves left\n\t0. Back" + "\n\t1. Up\n\t2. Down\n\t3. Left\n\t4. Right");
-            moveCommand = input.nextInt();
-            if (!game.moveCharacter(handleDirection(moveCommand))) {
+            int moveCommand = getMoveInput();
+            if (!game.moveCharacter(handleDirection(moveCommand)) & moveCommand != 0) {
                 System.out.println("Invalid spot\n");
             }
         } else {

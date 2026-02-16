@@ -14,7 +14,7 @@ public class DummyCharacter extends Character {
         this.setSpeed(speed);
         this.setMove(move);
         this.setAbility(ability);
-        this.setX(cordY);
+        this.setX(cordX);
         this.setY(cordY);
         this.setAttacks(attacks);
     }
