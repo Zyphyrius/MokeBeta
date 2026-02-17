@@ -6,7 +6,7 @@ public class MWBerserker extends Character {
         this.setName("Murky Water Berserker");
         this.setMaxHealth(120);
         this.setHealth(120);
-        this.setAttack(20);
+        this.setAttack(15);
         this.setAttacks(1);
         this.setRange(1);
         this.setSpeed(72);

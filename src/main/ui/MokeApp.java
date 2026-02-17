@@ -6,9 +6,12 @@ import model.Tile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.prefs.BackingStoreException;
 
+import model.BarcelonaBeefBogger;
 import model.Character;
 import model.EnemyAI;
+import model.FridgeWagonMotor;
 import model.Gameboard;
 import model.HotMould;
 import model.LordFishbowl;
@@ -23,7 +26,7 @@ public class MokeApp {
     private EnemyAI enemyAI;
     private boolean newTurn;
     private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
-                "Hot Mould"));
+                "Hot Mould", "Fridge Wagon Motor", "Barcelona Beef Bogger"));
     private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
                 "Murky Water Trooper", "Murky Water Berserker"));
     
@@ -286,6 +289,10 @@ public class MokeApp {
                 return new LordFishbowl();
             case "Hot Mould":
                 return new HotMould();
+            case "Fridge Wagon Motor":
+                return new FridgeWagonMotor();
+            case "Barcelona Beef Bogger":
+                return new BarcelonaBeefBogger();
             default:
                 return null;
         }
