@@ -24,7 +24,9 @@ public class EnemyAITest {
     @BeforeEach
     void runBefore() {
         c1 = new DummyCharacter("A", 100, 10, 2, 4, 2, "a dude", 0, 0, 2);
+        c1.setAttackFilter(new AllyFilter());
         c2 = new DummyCharacter("B", 100, 100, 1, 3, 1, "strong", 0, 1, 1);
+        c2.setAttackFilter(new AllyFilter());
         c3 = new DummyCharacter("C", 100, 50, 3,  2, 4, "abc", 1, 2, 1);
         c4 = new DummyCharacter("D", 90, 10, 4,  1, 3, "abc", 2, 2, 1);
         c5 = new DummyCharacter("E", 100, 10, 1,  1, 2, "far away", 4, 4, 1);
@@ -42,6 +44,15 @@ public class EnemyAITest {
         mg.getGameboard().placeCharacter(1, 2, c3);
         mg.getGameboard().placeCharacter(2, 2, c4);
         mg.getGameboard().placeCharacter(4, 4, c5);
+    }
+
+    @Test
+    void testConstructor() {
+        assertTrue(enemyAI.getNeededForGame());
+        enemyAI.setNeededForGame(false);
+        assertFalse(enemyAI.getNeededForGame());
+        assertFalse(enemyAI.getMoved());
+        assertFalse(enemyAI.getAttacked());
     }
 
     @Test
@@ -88,6 +99,20 @@ public class EnemyAITest {
     }
 
     @Test
+    void testDetermineAttackBerserker() {
+        c1 = new MWBerserker();
+        c1.setX(0);
+        c1.setY(2);
+        c1.setAttacksLeft(1);
+        c1.setMovesLeft(1);
+        assertEquals(1, enemyAI.determineAttack(c1));
+        assertFalse(enemyAI.getAttacked());
+        c1.setMovesLeft(0);
+        assertEquals(1, enemyAI.determineAttack(c1));
+        assertTrue(enemyAI.getAttacked());
+    }
+
+    @Test
     void testDetermineMoveInRange() {
         c1.setMovesLeft(2);
         assertFalse(enemyAI.getMoved());
@@ -118,8 +143,6 @@ public class EnemyAITest {
 
     @Test
     void testDeterineMoveVertBlocked() {
-        c1.setX(4);
-        c1.setY(3);
         mg.getGameboard().placeCharacter(4, 3, c1);
         c5.setMovesLeft(2);
         assertEquals(3, enemyAI.determineMove(c5));
@@ -130,16 +153,59 @@ public class EnemyAITest {
     }
 
     @Test
-    void testDetermineMoveBlocked() {
-        c1.setX(4);
-        c1.setY(3);
+    void testDetermineMoveBlockedUpLeft() {
         mg.getGameboard().placeCharacter(4, 3, c1);
-        c2.setX(3);
-        c2.setY(4);
         mg.getGameboard().placeCharacter(3, 4, c2);
         c5.setMovesLeft(2);
         assertEquals(0, enemyAI.determineMove(c5));
         assertTrue(enemyAI.getMoved());
     }
 
+    @Test
+    void testDetermineMoveBlockedDownRight() {
+        mg.getGameboard().placeCharacter(4, 5, c1);
+        mg.getGameboard().placeCharacter(5, 4, c2);
+        c4.setX(6);
+        c4.setY(6);
+        c5.setMovesLeft(2);
+        assertEquals(0, enemyAI.determineMove(c5));
+        assertTrue(enemyAI.getMoved());
+    }
+
+    
+    @Test
+    void testDetermineMoveLeftBlockedUp() {
+        mg.getGameboard().placeCharacter(3, 4, c1);
+        c4.setX(1);
+        c4.setY(3);
+        c5.setMovesLeft(2);
+        assertEquals(1, enemyAI.determineMove(c5));
+    }
+
+    @Test
+    void testDetermineMoveLeftBlockedDown() {
+        mg.getGameboard().placeCharacter(3, 4, c1);
+        c4.setX(1);
+        c4.setY(5);
+        c5.setMovesLeft(2);
+        assertEquals(2, enemyAI.determineMove(c5));
+    }
+    
+    @Test
+    void testDetermineMoveRightBlockedUp() {
+        mg.getGameboard().placeCharacter(5, 4, c1);
+        c4.setX(6);
+        c4.setY(3);
+        c5.setMovesLeft(2);
+        assertEquals(1, enemyAI.determineMove(c5));
+    }
+
+     @Test
+    void testDetermineMoveRightBlockedDown() {
+        mg.getGameboard().placeCharacter(5, 4, c1);
+        c4.setX(6);
+        c4.setY(5);
+        c5.setMovesLeft(2);
+        assertEquals(2, enemyAI.determineMove(c5));
+    }
 }

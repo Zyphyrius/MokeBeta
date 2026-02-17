@@ -12,6 +12,7 @@ import model.EnemyAI;
 import model.Gameboard;
 import model.HotMould;
 import model.LordFishbowl;
+import model.MWBerserker;
 import model.MWCultist;
 import model.MWTrooper;
 
@@ -20,10 +21,11 @@ public class MokeApp {
     private int command;
     private MokeGame game;
     private EnemyAI enemyAI;
+    private boolean newTurn;
     private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
                 "Hot Mould"));
     private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
-                "Murky Water Trooper"));
+                "Murky Water Trooper", "Murky Water Berserker"));
     
     // EFFECTS: runs the best game ever (moke) and handles all inputs
     public MokeApp() {
@@ -33,15 +35,20 @@ public class MokeApp {
     // MODIFIES: this
     // EFFECTS: starts game and processes inputs while game isnt over
     private void runMoke() {
-        inputCharacters();
-        game.startBoard();
-        enemyAINeeded();
-        numberCharacters();
+        init();
         while (!game.isGameOver()) {
             printBoard();
             System.out.println("\nTurn Order:");
             printList(charactersToNames(MokeGame.getTurnOrder()));
-            System.out.println("\nIt's " + game.getCurrentCharacter().getName() + "'s turn!\n");
+            try {
+                Thread.sleep(800);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            if (newTurn) {
+                newTurn = false;
+                System.out.println("\nIt's " + game.getCurrentCharacter().getName() + "'s turn!\n");
+            }
             command = getTurnInput();
             handleTurn(command);
             game.checkDead();
@@ -49,12 +56,23 @@ public class MokeApp {
         gameOver();
     }
 
+    // MODIFIES: this
+    // EFFECTS: asks for character inputs and if AI is needed, 
+    //          then initializes board, character names, and starts new turn
+    private void init() {
+        inputCharacters();
+        game.startBoard();
+        enemyAINeeded();
+        numberCharacters();
+        newTurn = true;
+    }
+
     // EFFECTS: return player's turn input or enemy ais input depending on the current character and if ai is wanted
     private int getTurnInput() {
         if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
             return enemyAI.determineAction(game.getCurrentCharacter());
         } else {
-            System.out.println("\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
+            System.out.println("\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
             return input.nextInt();
         }
     }
@@ -116,9 +134,7 @@ public class MokeApp {
                 handleView();
                 break;
             case 4:
-                game.nextTurn();
-                enemyAI.setAttacked(false);
-                enemyAI.setMoved(false);
+                handleEndTurn();
                 break;
             case 5:
                 game.setGameOver(false);
@@ -127,6 +143,17 @@ public class MokeApp {
                 System.out.println("Invalid input\n");
                 break;
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: starts next turn and resets attacked, moved, and newTurn
+    private void handleEndTurn() {
+        System.out.println(game.getCurrentCharacter().getName() 
+                + " ended turn\n____________________________________\n");
+        game.nextTurn();
+        enemyAI.setAttacked(false);
+        enemyAI.setMoved(false);
+        newTurn = true;
     }
 
     // EFFECTS: finds all attackers in range, then attacks inputted target. will go back if no more attacks
@@ -204,9 +231,9 @@ public class MokeApp {
     // EFFECTS: gives a finishing prompt after the game is over
     private void gameOver() {
         if (game.didWin()) {
-            System.out.println("YOU WON!!!");
+            System.out.println("ALLIES WON!!!");
         } else {
-            System.out.println("you lost...");
+            System.out.println("allies lost...");
         }
         System.out.println("bye! hope you had fun!");
     }
@@ -293,6 +320,8 @@ public class MokeApp {
                 return new MWCultist();
             case "Murky Water Trooper":
                 return new MWTrooper();
+            case "Murky Water Berserker":
+                return new MWBerserker();
             default:
                 return null;
         }

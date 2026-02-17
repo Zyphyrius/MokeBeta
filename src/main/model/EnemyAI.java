@@ -65,8 +65,8 @@ public class EnemyAI {
     private boolean shouldMoveUp(boolean vertGreater, int enemyX, int enemyY, int closestX, int closestY) {
         Gameboard board = game.getGameboard();
         return (vertGreater
-            || !((enemyX > closestX & board.validTile(enemyX - 1, enemyY))
-                || enemyX < closestX & board.validTile(enemyX + 1, enemyY)))
+            || ((enemyX > closestX & !board.validTile(enemyX - 1, enemyY))
+                || (enemyX < closestX & !board.validTile(enemyX + 1, enemyY))))
                 & enemyY > closestY & board.validTile(enemyX, enemyY - 1);
     }
 
@@ -76,8 +76,8 @@ public class EnemyAI {
     private boolean shouldMoveDown(boolean vertGreater, int enemyX, int enemyY, int closestX, int closestY) {
         Gameboard board = game.getGameboard();
         return (vertGreater
-            || !((enemyX > closestX & board.validTile(enemyX - 1, enemyY))
-                || enemyX < closestX & board.validTile(enemyX + 1, enemyY)))
+            || ((enemyX > closestX & !board.validTile(enemyX - 1, enemyY))
+                || (enemyX < closestX & !board.validTile(enemyX + 1, enemyY))))
                 & enemyY < closestY & board.validTile(enemyX, enemyY + 1);
     }
 
@@ -104,17 +104,20 @@ public class EnemyAI {
 
     // MODIFIES: this
     // EFFECTS: sets attacked to true if this is the last attack for the turn
+    //          IF enemy is berserker, moves left must also be 0
     private void checkLastAttack(Character enemy) {
         if (enemy.getAttacksLeft() == 1) {
-            attacked = true;
+            if (!(enemy instanceof MWBerserker) || enemy.getMovesLeft() == 0) {
+                attacked = true;
+            }
         }
     }
 
     // EFFECTS: returns the next attack for the enemy
     //          attacks whoever is lowest hp within range
-    //          when out of attacks or no more allies in range, attacked = true
+    //          when out of attacks or no more targets in range, attacked = true
     public int determineAttack(Character enemy) {
-        ArrayList<Character> inRange = enemy.getInRange(new AllyFilter());
+        ArrayList<Character> inRange = enemy.getInRange(enemy.getAttackFilter());
         if (!inRange.isEmpty()) {
             Character lowest = inRange.get(0);
             for (Character c : inRange) {

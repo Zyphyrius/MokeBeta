@@ -16,7 +16,7 @@ public class HotMould extends Character {
     }
 
     // REQUIRES: attacksLeft > 0
-    // MODIFIES: this, target
+    // MODIFIES: this
     // EFFECTS: performs attack on a target and removes 1 from attacksLeft.
     //          if ally, heal. if enemy, hurt
     public void attack(Character target) {

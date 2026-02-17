@@ -16,7 +16,7 @@ public class MWTrooper extends Character {
     }
 
     // REQUIRES: attacksLeft > 0
-    // MODIFIES: this, target
+    // MODIFIES: this
     // EFFECTS: performs attack on a target and removes 1 from attacksLeft. if within range 1, do -10 damage
     public void attack(Character target) {
         if (Math.abs(target.getX() - this.getX()) <= 1 & Math.abs(target.getY() - this.getY()) <= 1) {
