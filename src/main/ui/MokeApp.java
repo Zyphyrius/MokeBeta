@@ -6,7 +6,6 @@ import model.Tile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.prefs.BackingStoreException;
 
 import model.BarcelonaBeefBogger;
 import model.Character;
@@ -23,13 +22,21 @@ public class MokeApp {
     private Scanner input = new Scanner(System.in);
     private int command;
     private MokeGame game;
+    private Character current;
     private EnemyAI enemyAI;
     private boolean newTurn;
-    private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
-                "Hot Mould", "Fridge Wagon Motor", "Barcelona Beef Bogger"));
-    private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
-                "Murky Water Trooper", "Murky Water Berserker"));
-    
+    //private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
+    //            "Hot Mould", "Fridge Wagon Motor", "Barcelona Beef Bogger"));
+    //private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
+    //            "Murky Water Trooper", "Murky Water Berserker"));
+    private static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
+        new FridgeWagonMotor(), new BarcelonaBeefBogger()));
+    private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
+        new MWBerserker()));
+    private String red = "\u001B[31m";
+    private String blue = "\u001B[34m";
+    private String resetColour = "\u001B[0m";
+
     // EFFECTS: runs the best game ever (moke) and handles all inputs
     public MokeApp() {
         runMoke();
@@ -50,7 +57,7 @@ public class MokeApp {
             }
             if (newTurn) {
                 newTurn = false;
-                System.out.println("\nIt's " + game.getCurrentCharacter().getName() + "'s turn!\n");
+                System.out.println("\nIt's " + current.getName() + "'s turn!\n");
             }
             command = getTurnInput();
             handleTurn(command);
@@ -60,20 +67,23 @@ public class MokeApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: asks for character inputs and if AI is needed, 
+    // EFFECTS: asks if tutorial needed then for character inputs and if AI is needed, 
     //          then initializes board, character names, and starts new turn
     private void init() {
+        System.out.println("Welcome to MOKE!\n");
+        askTutorial();
         inputCharacters();
         game.startBoard();
         enemyAINeeded();
         numberCharacters();
+        current = game.getCurrentCharacter();
         newTurn = true;
     }
 
     // EFFECTS: return player's turn input or enemy ais input depending on the current character and if ai is wanted
     private int getTurnInput() {
-        if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
-            return enemyAI.determineAction(game.getCurrentCharacter());
+        if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
+            return enemyAI.determineAction(current);
         } else {
             System.out.println("\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
             return input.nextInt();
@@ -82,10 +92,10 @@ public class MokeApp {
 
     // EFFECTS: return player's attack input or enemy ais input depending on the current character and if ai is wanted
     private int getAttackInput(ArrayList<Character> inRange) {
-        if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
-            return enemyAI.determineAttack(game.getCurrentCharacter());
+        if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
+            return enemyAI.determineAttack(current);
         } else {
-            System.out.println("\nYou have " + Integer.toString(game.getCurrentCharacter().getAttacksLeft())
+            System.out.println("\nYou have " + Integer.toString(current.getAttacksLeft())
                     + " attacks left\n\t0. Back");
             if (inRange.isEmpty()) {
                 System.out.println("\tno one in range...\n");
@@ -98,10 +108,10 @@ public class MokeApp {
 
     // EFFECTS: return player's move input or enemy ais input depending on the current character and if ai is wanted
     private int getMoveInput() {
-        if (MokeGame.getEnemies().contains(game.getCurrentCharacter()) & enemyAI.getNeededForGame()) {
-            return enemyAI.determineMove(game.getCurrentCharacter());
+        if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
+            return enemyAI.determineMove(current);
         } else {
-            System.out.println("You have " + Integer.toString(game.getCurrentCharacter().getMovesLeft()) 
+            System.out.println("You have " + Integer.toString(current.getMovesLeft()) 
                     + " moves left\n\t0. Back" + "\n\t1. Up\n\t2. Down\n\t3. Left\n\t4. Right");
             return input.nextInt();
         }
@@ -151,9 +161,10 @@ public class MokeApp {
     // MODIFIES: this
     // EFFECTS: starts next turn and resets attacked, moved, and newTurn
     private void handleEndTurn() {
-        System.out.println(game.getCurrentCharacter().getName() 
+        System.out.println(current.getName() 
                 + " ended turn\n____________________________________\n");
         game.nextTurn();
+        current = game.getCurrentCharacter();
         enemyAI.setAttacked(false);
         enemyAI.setMoved(false);
         newTurn = true;
@@ -161,9 +172,8 @@ public class MokeApp {
 
     // EFFECTS: finds all attackers in range, then attacks inputted target. will go back if no more attacks
     private void handleAttack() {
-        if (game.getCurrentCharacter().getAttacksLeft() > 0) {
-            ArrayList<Character> inRange = 
-                    game.getCurrentCharacter().getInRange(game.getCurrentCharacter().getAttackFilter());
+        if (current.getAttacksLeft() > 0) {
+            ArrayList<Character> inRange = current.getInRange(current.getAttackFilter(), current.getRange());
             int attackCommand = getAttackInput(inRange);
             if (attackCommand > 0 & attackCommand <= inRange.size()) {
                 Character target = inRange.get(attackCommand - 1);
@@ -181,7 +191,7 @@ public class MokeApp {
 
     // EFFECTS: handles one instance of movement during a turn. will go back if no more moves
     private void handleMove() {
-        if (game.getCurrentCharacter().getMovesLeft() > 0) {
+        if (current.getMovesLeft() > 0) {
             int moveCommand = getMoveInput();
             if (!game.moveCharacter(handleDirection(moveCommand)) & moveCommand != 0) {
                 System.out.println("Invalid spot\n");
@@ -246,7 +256,6 @@ public class MokeApp {
     private void inputCharacters() {
         ArrayList<Character> allies;
         ArrayList<Character> enemies;
-        System.out.println("Welcome to MOKE!\n\n");
         allies = inputAllies();
         if (allies.isEmpty()) {
             System.out.println("You fool you didn't add a character! You get Lord Fishbowl\n");
@@ -276,6 +285,7 @@ public class MokeApp {
             } else {
                 System.out.println("Invalid input\n");
             }
+            System.out.println("\n" + charactersToNames(allies) + "\n");
         }
         return allies;
     }
@@ -283,7 +293,7 @@ public class MokeApp {
     // REQUIRES: index <= allAllies.size()
     // EFFECTS: returns which ally should be added
     private Character inputAlly(int index) {
-        String allyName = allAllies.get(index - 1);
+        String allyName = charactersToNames(allAllies).get(index - 1);
         switch (allyName) {
             case "Lord Fishbowl":
                 return new LordFishbowl();
@@ -314,6 +324,7 @@ public class MokeApp {
             } else {
                 System.out.println("Invalid input\n");
             }
+            System.out.println("\n" + charactersToNames(enemies) + "\n");
         }
         return enemies;
     }
@@ -321,7 +332,7 @@ public class MokeApp {
     // REQUIRES: index <= allEnemies.size()
     // EFFECTS: returns which enemy should be added
     private Character inputEnemy(int index) {
-        String enemyName = allEnemies.get(index - 1);
+        String enemyName = charactersToNames(allEnemies).get(index - 1);
         switch (enemyName) {
             case "Murky Water Cultist":
                 return new MWCultist();
@@ -334,9 +345,29 @@ public class MokeApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTs: asks player if they want a tutorial, if yes print a short explanation
+    private void askTutorial() {
+        System.out.println("\nIs this your first time playing?\n\t1. Yes tutorial please\n\t2. I'm a pro!\n");
+        command = input.nextInt();
+        if (command != 2) {
+            System.out.println("MOKE is a turn based game where you as allies will face off " 
+                    + "against the evil Murky Water Cult on a board with tiles.\n"
+                    + "You win if all enemies are defeated.\n\n Each character has "
+                    + "hp, atk, range, moves, speed, and a special ability."
+                    + "\n\n\tHp is a characters health. Don't let it hit 0"
+                    + "\n\n\tAtk is the amount of damage a character deals. A character can attack once per turn"
+                    + "\n\n\tRange is how many tiles a character's attack can reach"
+                    + "\n\n\tMoves is how many tiles a character can move each turn"
+                    + "\n\n\tSpeed determines where the character lands on the turn order\n\n"
+                    + "Each turn you can move and attack, then you end the turn when you are ready."
+                    + "\nThat's about it. Good luck!\n");
+        }
+    }
+
     // EFFECTS: prints the given list with corresponding numbers
-    private void printList(ArrayList<String> listToPrint) {
-        for (String s : listToPrint) {
+    private void printList(ArrayList<?> listToPrint) {
+        for (Object s : listToPrint) {
             System.out.println('\t' + Integer.toString(listToPrint.indexOf(s) + 1) + ". " + s);
         }
     }
@@ -350,13 +381,19 @@ public class MokeApp {
         return characterNames;
     }
 
-    // EFFECTS: prints out the board with numbers to indicate each character based off turn order
+    // EFFECTS: prints out the board with numbers to indicate each character based off turn order and coloured
     private void printBoard() {
         Gameboard gb = game.getGameboard();
         String board = "";
         for (Tile t : gb.getTiles()) {
             if (t.getCharacter() != null) {
-                board += Integer.toString(MokeGame.getTurnOrder().indexOf(t.getCharacter()) + 1) + " ";
+                if (MokeGame.getAllies().contains(t.getCharacter())) {
+                    board += blue + Integer.toString(MokeGame.getTurnOrder().indexOf(t.getCharacter()) + 1) 
+                                + " " + resetColour;
+                } else {
+                    board += red + Integer.toString(MokeGame.getTurnOrder().indexOf(t.getCharacter()) + 1) 
+                                + " " + resetColour;
+                }   
             } else {
                 board += "x ";
             }
@@ -369,11 +406,20 @@ public class MokeApp {
 
     // MODIFIES: character
     // EFFECTS: makes each character's name unique by adding a number at the end of their name
+    //          and coloured based on if they are an ally or enemy
     private void numberCharacters() {
         ArrayList<String> nameHolder = new ArrayList<String>();
+        
         for (Character c : MokeGame.getTurnOrder()) {
             nameHolder.add(c.getName());
-            c.setName(c.getName() + " " + Integer.toString(countRepeatNames(c.getName(), nameHolder)));
+            if (MokeGame.getAllies().contains(c)) {
+                c.setName(blue + c.getName() + " "
+                        + Integer.toString(countRepeatNames(c.getName(), nameHolder)) + resetColour);
+            } else {
+                c.setName(red + c.getName() + " " 
+                        + Integer.toString(countRepeatNames(c.getName(), nameHolder)) + resetColour);
+            }
+            
         }
     }
 

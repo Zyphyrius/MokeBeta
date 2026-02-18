@@ -2,6 +2,7 @@ package model;
 
 // An enemy with long range, but less damage upfront
 public class MWTrooper extends Character {
+    // EFFECTS: creates a Murky Water Trooper with basic stats
     public MWTrooper() {
         this.setName("Murky Water Trooper");
         this.setMaxHealth(90);
@@ -25,5 +26,11 @@ public class MWTrooper extends Character {
             target.hurt(this.getAttack(), this);
         }
         setAttacksLeft(getAttacksLeft() - 1);
+    }
+
+    // EFFECTS: prints out a description of mw trooper
+    @Override
+    public String toString() {
+        return "Murky Water Trooper - A ranged unit that deals less damage up close";
     }
 }

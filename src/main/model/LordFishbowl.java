@@ -2,6 +2,7 @@ package model;
 
 // Lord Fishbowl is an ally character that can't be hurt by far away enemies
 public class LordFishbowl extends Character {
+    // EFFECTS: creates a Lord Fishbowl with basic stats
     public LordFishbowl() {
         this.setName("Lord Fishbowl");
         this.setMaxHealth(100);
@@ -19,7 +20,7 @@ public class LordFishbowl extends Character {
     // EFFECTS: lose health equal to damage, if damage <= 0 or enemy not in range, do nothing
     //          if damage >= health, set health to 0
     public void hurt(int damage, Character attacker) {
-        if (damage > 0 & this.getInRange(new EnemyFilter()).contains(attacker)) {
+        if (damage > 0 & this.getInRange(new EnemyFilter(), this.getRange()).contains(attacker)) {
             if (damage >= this.getHealth()) {
                 this.setHealth(0);
             } else {
@@ -28,5 +29,9 @@ public class LordFishbowl extends Character {
         }
     }
 
-
+    // EFFECTS: prints out a description of lord fishbowl
+    @Override
+    public String toString() {
+        return "Lord Fishbowl - A ranged unit that attacks twice and can't be attacked from far away enemies";
+    }
 }

@@ -2,6 +2,7 @@ package model;
 
 // A melee enemy that can consume moves left to attack
 public class MWBerserker extends Character {
+    // EFFECTS: creates a Murky Water Berserker with basic stats
     public MWBerserker() {
         this.setName("Murky Water Berserker");
         this.setMaxHealth(120);
@@ -25,5 +26,11 @@ public class MWBerserker extends Character {
         } else {
             setMovesLeft(getMovesLeft() - 1);
         }
+    }
+
+    // EFFECTS: prints out a description of mw berserker
+    @Override
+    public String toString() {
+        return "Murky Water Berserker - A melee unit that consumes moves to do extra attacks";
     }
 }

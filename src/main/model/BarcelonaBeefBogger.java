@@ -2,6 +2,7 @@ package model;
 
 // An ally who is heals the lowest hp ally when this kills an enemy
 public class BarcelonaBeefBogger extends Character {
+    // EFFECTS: creates a Barcelona Beef Bogger with basic stats
     public BarcelonaBeefBogger() {
         this.setName("Barcelona Beef Bogger");
         this.setMaxHealth(90);
@@ -34,5 +35,11 @@ public class BarcelonaBeefBogger extends Character {
             int healing = (int) (lowest.getMaxHealth() * 0.5);
             lowest.heal(healing);
         }
+    }
+
+    // EFFECTS: prints out a description of barcelona beef bogger
+    @Override
+    public String toString() {
+        return "Barcelona Beef Bogger - A ranged unit that heals allies when killing enemies";
     }
 }

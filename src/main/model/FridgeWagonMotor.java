@@ -2,6 +2,7 @@ package model;
 
 // An ally who is tanky, speedy and does more damage at lower health
 public class FridgeWagonMotor extends Character {
+    // EFFECTS: creates a Fridge Wagon Motor with basic stats 
     public FridgeWagonMotor() {
         this.setName("Fridge Wagon Motor");
         this.setMaxHealth(200);
@@ -26,5 +27,11 @@ public class FridgeWagonMotor extends Character {
             target.hurt(this.getAttack(), this);
         }
         setAttacksLeft(getAttacksLeft() - 1);
+    }
+
+    // EFFECTS: prints out a description of fridge wagon motor
+    @Override
+    public String toString() {
+        return "Fridge Wagon Motor - A melee unit that moves fast and deals extra damage at low hp";
     }
 }

@@ -2,6 +2,7 @@ package model;
 
 // An ally character that can heal with his attack
 public class HotMould extends Character {
+    // EFFECTS: creates a Hot Mould with basic stats
     public HotMould() {
         this.setName("Hot Mould");
         this.setMaxHealth(110);
@@ -28,4 +29,9 @@ public class HotMould extends Character {
         setAttacksLeft(getAttacksLeft() - 1);
     }
 
+    // EFFECTS: prints out a description of hot mould
+    @Override
+    public String toString() {
+        return "Hot Mould - A ranged unit that can heal allies or attack enemies";
+    }
 }

@@ -63,7 +63,7 @@ public abstract class Character {
     }
 
     // EFFECTS: returns all characters in range that are not itself with specified filter
-    public ArrayList<Character> getInRange(CharacterFilter cf) {
+    public ArrayList<Character> getInRange(CharacterFilter cf, int range) {
         ArrayList<Character> inRange = new ArrayList<Character>();
         ArrayList<Character> allCharacters = new ArrayList<Character>(MokeGame.getAllies());
         allCharacters.addAll(MokeGame.getEnemies());

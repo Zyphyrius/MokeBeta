@@ -101,13 +101,13 @@ public class CharacterTest {
 
     @Test
     void testGetInRange() {
-        assertEquals(c1.getInRange(new NoFilter()), List.of(c3, c2));
+        assertEquals(c1.getInRange(new NoFilter(), c1.getRange()), List.of(c3, c2));
         c1.setAttackFilter(new EnemyFilter());
-        assertEquals(c1.getInRange(c1.getAttackFilter()), List.of(c2));
+        assertEquals(c1.getInRange(c1.getAttackFilter(), c1.getRange()), List.of(c2));
         c1.setAttackFilter(new AllyFilter());
-        assertEquals(c1.getInRange(c1.getAttackFilter()), List.of(c3));
-        assertEquals(c2.getInRange(c1.getAttackFilter()), List.of(c3));
-        assertEquals(c3.getInRange(new NoFilter()), List.of(c2));
+        assertEquals(c1.getInRange(c1.getAttackFilter(), c1.getRange()), List.of(c3));
+        assertEquals(c2.getInRange(c1.getAttackFilter(), c2.getRange()), List.of(c3));
+        assertEquals(c3.getInRange(new NoFilter(), c3.getRange()), List.of(c2));
     }
 
     @Test

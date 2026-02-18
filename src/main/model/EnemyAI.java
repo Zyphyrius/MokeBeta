@@ -38,7 +38,7 @@ public class EnemyAI {
     //          when moves left = 0 or choose not to move, moved = true
     //          will always try to move before attacking
     public int determineMove(Character enemy) {
-        if (enemy.getInRange(new AllyFilter()).isEmpty()) {
+        if (enemy.getInRange(new AllyFilter(), enemy.getRange()).isEmpty()) {
             Character closest = getNearestAlly(enemy);
             boolean vertGreater = getYDistance(enemy, closest) >= getXDistance(enemy, closest);
             if (shouldMoveUp(vertGreater, enemy.getX(), enemy.getY(), closest.getX(), closest.getY())) {
@@ -117,7 +117,7 @@ public class EnemyAI {
     //          attacks whoever is lowest hp within range
     //          when out of attacks or no more targets in range, attacked = true
     public int determineAttack(Character enemy) {
-        ArrayList<Character> inRange = enemy.getInRange(enemy.getAttackFilter());
+        ArrayList<Character> inRange = enemy.getInRange(enemy.getAttackFilter(), enemy.getRange());
         if (!inRange.isEmpty()) {
             Character lowest = inRange.get(0);
             for (Character c : inRange) {
