@@ -1,6 +1,7 @@
 package ui;
 
 import model.MokeGame;
+import model.MopedMarauder;
 import model.Tile;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class MokeApp {
     //private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
     //            "Murky Water Trooper", "Murky Water Berserker"));
     private static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
-        new FridgeWagonMotor(), new BarcelonaBeefBogger()));
+        new FridgeWagonMotor(), new BarcelonaBeefBogger(), new MopedMarauder()));
     private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
         new MWBerserker()));
     private String red = "\u001B[31m";
@@ -303,6 +304,8 @@ public class MokeApp {
                 return new FridgeWagonMotor();
             case "Barcelona Beef Bogger":
                 return new BarcelonaBeefBogger();
+            case "Moped Marauder":
+                return new MopedMarauder();
             default:
                 return null;
         }
