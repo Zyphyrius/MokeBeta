@@ -39,4 +39,10 @@ public class LordFishbowlTest {
         lfb.hurt(10, c2);
         assertEquals(100, lfb.getHealth());
     }
+
+    @Test
+    void testToString() {
+        assertEquals("Lord Fishbowl - A ranged unit that attacks twice and can't be attacked "
+                + "from far away enemies", lfb.toString());
+    }
 }

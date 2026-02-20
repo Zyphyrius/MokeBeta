@@ -17,6 +17,7 @@ import model.HotMould;
 import model.LordFishbowl;
 import model.MWBerserker;
 import model.MWCultist;
+import model.MWNukeRain;
 import model.MWTrooper;
 
 public class MokeApp {
@@ -33,7 +34,7 @@ public class MokeApp {
     private static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
         new FridgeWagonMotor(), new BarcelonaBeefBogger(), new MopedMarauder()));
     private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
-        new MWBerserker()));
+        new MWBerserker(), new MWNukeRain()));
     private String red = "\u001B[31m";
     private String blue = "\u001B[34m";
     private String resetColour = "\u001B[0m";
@@ -59,6 +60,9 @@ public class MokeApp {
             if (newTurn) {
                 newTurn = false;
                 System.out.println("\nIt's " + current.getName() + "'s turn!\n");
+                if (!current.getStatuses().isEmpty()) {
+                    System.out.println(current.getName() + " is " + current.getStatuses());
+                }
             }
             command = getTurnInput();
             handleTurn(command);
@@ -343,6 +347,8 @@ public class MokeApp {
                 return new MWTrooper();
             case "Murky Water Berserker":
                 return new MWBerserker();
+            case "Murky Water Nuke Rain":
+                return new MWNukeRain();
             default:
                 return null;
         }

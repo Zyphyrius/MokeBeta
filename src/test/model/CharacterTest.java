@@ -18,8 +18,10 @@ public class CharacterTest {
     ArrayList<Character> enemies;
     Gameboard gb;
     MokeGame mg;
-    
-
+    Stun stun;
+    Immobilize immobilize;
+    Strengthen strengthen1;
+    Strengthen strengthen2;
 
     @BeforeEach
     void runBefore() {
@@ -32,6 +34,10 @@ public class CharacterTest {
         allies.add(c3);
         enemies.add(c2);
         mg = new MokeGame(allies, enemies);
+        stun = new Stun(2);
+        immobilize = new Immobilize(1);
+        strengthen1 = new Strengthen(2, 10);
+        strengthen2 = new Strengthen(2, 30);
     }
 
     @Test
@@ -160,5 +166,49 @@ public class CharacterTest {
     void testXY(int cordX, int cordY, Character c) {
         assertEquals(c.getX(), cordX);
         assertEquals(c.getY(), cordY);
+    }
+
+    @Test
+    void testTickDownAll() {
+        c1.addStatus(immobilize);
+        c1.addStatus(stun);
+        assertEquals(1, immobilize.getDuration());
+        assertEquals(2, stun.getDuration());
+        assertEquals(2, c1.getStatuses().size());
+        c1.tickDownAll();
+        assertEquals(0, immobilize.getDuration());
+        assertEquals(1, stun.getDuration());
+        assertEquals(1, c1.getStatuses().size());
+        c1.tickDownAll();
+        assertEquals(0, stun.getDuration());
+        assertEquals(0, c1.getStatuses().size());
+    }
+
+    @Test
+    void testAddSameEffect() {
+        c1.addStatus(stun);
+        c1.addStatus(new Stun(3));
+        assertEquals(1, c1.getStatuses().size());
+        assertEquals(3, c1.getStatuses().get(0).getDuration());
+        c1.addStatus(new Stun(1));
+        assertEquals(1, c1.getStatuses().size());
+        assertEquals(3, c1.getStatuses().get(0).getDuration());
+    }
+
+    @Test
+    void testAddApplyStackable() {
+        c1.addStatus(strengthen1);
+        c1.addStatus(strengthen2);
+        assertEquals(2, c1.getStatuses().size());
+        c1.applyStatuses();
+        assertEquals(50, c1.getAttack());
+    }
+
+    @Test
+    void testApplyStatuses() {
+        c1.addStatus(stun);
+        c1.applyStatuses();
+        assertEquals(0, c1.getMovesLeft());
+        assertEquals(0, c1.getAttacksLeft());
     }
 }

@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-// Abstract class of a character, with all stats and standard version of game functions
+// Abstract class of a character, with all stats and standard version of game functions and no statuses
 public abstract class Character {
     private String name;
     private int maxHealth;
@@ -18,6 +18,7 @@ public abstract class Character {
     private int attacksLeft;
     private int movesLeft;
     private CharacterFilter charFilter;
+    private ArrayList<StatusEffect> statuses = new ArrayList<StatusEffect>();
 
     // MODIFIES: this
     // EFFECTS: lose health equal to damage, if damage <= 0, do nothing
@@ -110,6 +111,55 @@ public abstract class Character {
     public void moveLeft() {
         this.cordX -= 1;
         this.movesLeft -= 1;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: ticks down all effects, then removes ones with no more duration
+    public void tickDownAll() {
+        ArrayList<Integer> toRemove = new ArrayList<>();
+        for (StatusEffect s : statuses) {
+            s.tickDown(this);
+            if (s.getDuration() <= 0) {
+                toRemove.add(statuses.indexOf(s));
+            }
+        }
+        for (int i : toRemove) {
+            statuses.remove(i);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds the status to statuses. 
+    //           if not stackable and if already has the status, keep the one with longer duration
+    public void addStatus(StatusEffect status) {
+        boolean shouldAdd = true;
+        int toRemove = -1;
+        for (StatusEffect s : statuses) {
+            if (s.getClass() == status.getClass() & !s.isStackable()) {
+                if (s.getDuration() < status.getDuration()) {
+                    toRemove = statuses.indexOf(s);
+                } else {
+                    shouldAdd = false;
+                }
+            }
+        }
+        if (toRemove != -1) {
+            statuses.remove(toRemove);
+        }
+        if (shouldAdd) {
+            statuses.add(status);
+        }
+    }
+
+    // EFFECTS: applies all statuses on the character
+    public void applyStatuses() {
+        for (StatusEffect s : statuses) {
+            s.applyEffect(this);
+        }
+    }
+
+    public ArrayList<StatusEffect> getStatuses() {
+        return statuses;
     }
 
     public String getName() {

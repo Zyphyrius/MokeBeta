@@ -200,7 +200,7 @@ public class EnemyAITest {
         assertEquals(1, enemyAI.determineMove(c5));
     }
 
-     @Test
+    @Test
     void testDetermineMoveRightBlockedDown() {
         mg.getGameboard().placeCharacter(5, 4, c1);
         c4.setX(6);

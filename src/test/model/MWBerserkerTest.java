@@ -1,6 +1,5 @@
 package model;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,5 +29,10 @@ public class MWBerserkerTest {
         assertEquals(1, mwb.getAttacksLeft());
         mwb.attack(c1);
         assertEquals(0, mwb.getAttacksLeft());
+    }
+    
+    @Test
+    void testToString() {
+        assertEquals("Murky Water Berserker - A melee unit that consumes moves to do extra attacks", mwb.toString());
     }
 }

@@ -37,4 +37,9 @@ public class MWTrooperTest {
         assertEquals(70, c1.getHealth());
         assertEquals(0, mwt.getAttacksLeft());
     }
+
+    @Test
+    void testToString() {
+        assertEquals("Murky Water Trooper - A ranged unit that deals less damage up close", mwt.toString());
+    }
 }

@@ -3,7 +3,7 @@ package model;
 // A test character with inputtable stats and used for testing
 public class DummyCharacter extends Character {
 
-    // EFFECTS: creates a character with given stats and default no attack filter
+    // EFFECTS: creates a character with given stats and default no attack filter and no statuses
     public DummyCharacter(String name, int maxHealth, int attack, int range, int speed, int move, 
                         String ability, int cordX, int cordY, int attacks) {
         this.setName(name);

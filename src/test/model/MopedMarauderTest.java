@@ -48,5 +48,14 @@ public class MopedMarauderTest {
         mm.setMovesLeft(0);
         mm.attack(c1);
         assertEquals(5, mm.getMovesLeft());
+        mm.setMovesLeft(0);
+        mm.attack(c2);
+        assertEquals(0, mm.getMovesLeft());
+    }
+
+    @Test
+    void testToString() {
+        assertEquals("Moped Marauder - A ranged unit that attacks adjacent "
+                + "enemies when moving and resets moves when killing", mm.toString());
     }
 }

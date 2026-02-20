@@ -62,7 +62,7 @@ public class MokeGameTest {
     void testNextTurn() {
         assertEquals(c3, mg.getCurrentCharacter());
         assertTrue(mg.canMove());
-        mg.endMove();
+        mg.getCurrentCharacter().setMovesLeft(0);
         assertFalse(mg.canMove());
         assertTrue(mg.canAttack());
         mg.attackCharacter(c1);
@@ -75,6 +75,16 @@ public class MokeGameTest {
         mg.nextTurn();
         mg.nextTurn();
         assertEquals(c3, mg.getCurrentCharacter());
+    }
+
+    @Test 
+    void testNextTurnStatuses() {
+        c3.addStatus(new Stun(1));
+        c4.addStatus(new Immobilize(1));
+        mg.nextTurn();
+        assertEquals(0, c3.getStatuses().size());
+        assertEquals(1, c4.getStatuses().size());
+        assertEquals(0, c4.getMovesLeft());
     }
 
     @Test

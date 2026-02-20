@@ -25,5 +25,10 @@ public class MWCultistTest {
         assertEquals(2, mwc.getMove());
         assertEquals("A normal guy who has no special abilities", mwc.getAbility());
     }
+
+    @Test
+    void testToString() {
+        assertEquals("Murky Water Cultist - A melee unit that is weak and doesn't do much", mwc.toString());
+    }
 }
 

@@ -37,4 +37,9 @@ public class HotMouldTest {
         hm.attack(c1);
         assertEquals(90, c1.getHealth());
     }
+
+    @Test
+    void testToString() {
+        assertEquals("Hot Mould - A ranged unit that can heal allies or attack enemies", hm.toString());
+    }
 }

@@ -59,7 +59,9 @@ public class MokeGame {
     // MODIFIES: this
     // EFFECTS: sets current character to next character in turn order and resets move/attacks left
     //          when at end of turn order, return to first
+    //          ticks down previous character then applies effect for new one
     public void nextTurn() {
+        currentCharacter.tickDownAll();
         turnIndex++;
         if (turnIndex >= turnOrder.size()) {
             turnIndex = 0;
@@ -67,6 +69,7 @@ public class MokeGame {
         currentCharacter = turnOrder.get(turnIndex);
         currentCharacter.setMovesLeft(currentCharacter.getMove());
         currentCharacter.setAttacksLeft(currentCharacter.getAttacks());
+        currentCharacter.applyStatuses();
     }
 
     // MODIFIES: character
@@ -161,11 +164,6 @@ public class MokeGame {
             return true;
         }
         return false;
-    }
-
-    // EFFECTS: removes all from movesLeft
-    public void endMove() {
-        currentCharacter.setMovesLeft(0);
     }
 
     // MODIFIES: this
