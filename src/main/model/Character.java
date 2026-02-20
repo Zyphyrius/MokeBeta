@@ -116,15 +116,15 @@ public abstract class Character {
     // MODIFIES: this
     // EFFECTS: ticks down all effects, then removes ones with no more duration
     public void tickDownAll() {
-        ArrayList<Integer> toRemove = new ArrayList<>();
+        ArrayList<StatusEffect> toRemove = new ArrayList<>();
         for (StatusEffect s : statuses) {
             s.tickDown(this);
             if (s.getDuration() <= 0) {
-                toRemove.add(statuses.indexOf(s));
+                toRemove.add(s);
             }
         }
-        for (int i : toRemove) {
-            statuses.remove(i);
+        for (StatusEffect s : toRemove) {
+            statuses.remove(s);
         }
     }
 

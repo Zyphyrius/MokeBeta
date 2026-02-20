@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import model.AnAverageHailey;
 import model.BarcelonaBeefBogger;
 import model.Character;
 import model.EnemyAI;
@@ -27,12 +28,8 @@ public class MokeApp {
     private Character current;
     private EnemyAI enemyAI;
     private boolean newTurn;
-    //private static ArrayList<String> allAllies = new ArrayList<String>(List.of("Lord Fishbowl", 
-    //            "Hot Mould", "Fridge Wagon Motor", "Barcelona Beef Bogger"));
-    //private static ArrayList<String> allEnemies = new ArrayList<String>(List.of("Murky Water Cultist", 
-    //            "Murky Water Trooper", "Murky Water Berserker"));
     private static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
-        new FridgeWagonMotor(), new BarcelonaBeefBogger(), new MopedMarauder()));
+        new FridgeWagonMotor(), new BarcelonaBeefBogger(), new MopedMarauder(), new AnAverageHailey()));
     private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
         new MWBerserker(), new MWNukeRain()));
     private String red = "\u001B[31m";
@@ -310,6 +307,8 @@ public class MokeApp {
                 return new BarcelonaBeefBogger();
             case "Moped Marauder":
                 return new MopedMarauder();
+            case "An Average Hailey":
+                return new AnAverageHailey();
             default:
                 return null;
         }
