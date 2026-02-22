@@ -20,5 +20,5 @@ I intend for this game to be simple and usable by anyone who wants to play a fun
 - As a user, I want to be able to view each character's abilities
 - As a user, I want to be able to view the turn order, which is a list containing all characters
 - As a user, I want to be able to view the boardstate of the game
-- As a user, I want to be able to pause, save, and leave the game on my turn, or just leave
+- As a user, I want to be able to pause, save, and leave the game on my turn, or just leave by conceding
 - As a user, I want to be able to reload my saved game

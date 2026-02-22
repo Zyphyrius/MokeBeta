@@ -5,6 +5,7 @@ import model.MopedMarauder;
 import model.Tile;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -88,7 +89,12 @@ public class MokeApp {
             return enemyAI.determineAction(current);
         } else {
             System.out.println("\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
-            return input.nextInt();
+            try {
+                return input.nextInt();
+            } catch (InputMismatchException e) {
+                input.next();
+                return -1;
+            }
         }
     }
 
@@ -104,7 +110,12 @@ public class MokeApp {
             } else {
                 printList(charactersToNames(inRange));
             }
-            return input.nextInt();
+            try {
+                return input.nextInt();
+            } catch (InputMismatchException e) {
+                input.next();
+                return -1;
+            }
         }
     }
 
@@ -115,14 +126,24 @@ public class MokeApp {
         } else {
             System.out.println("You have " + Integer.toString(current.getMovesLeft()) 
                     + " moves left\n\t0. Back" + "\n\t1. Up\n\t2. Down\n\t3. Left\n\t4. Right");
-            return input.nextInt();
+            try {
+                return input.nextInt();
+            } catch (InputMismatchException e) {
+                input.next();
+                return -1;
+            }
         }
     }
 
     // EFFECTS: creates a new enemy ai and prompts the player if they want it or not
     private void enemyAINeeded() {
         System.out.println("Would you like to face COM or another player?\n\t1. COM\n\t2. PLAYER\n");
-        command = input.nextInt();
+        try {
+            command =  input.nextInt();
+        } catch (InputMismatchException e) {
+            input.next();
+            command = -1;
+        }
         if (command == 1) {
             enemyAI = new EnemyAI(game, true);
             System.out.println("Going against COM!\n");
@@ -228,7 +249,12 @@ public class MokeApp {
         int viewCommand;
         System.out.println("Who do you want to view?\n\t0. Back");
         printList(charactersToNames(MokeGame.getTurnOrder()));
-        viewCommand = input.nextInt();
+        try {
+            viewCommand = input.nextInt();
+        } catch (InputMismatchException e) {
+            input.next();
+            viewCommand = -1;
+        }
         if (viewCommand > 0 & viewCommand <= MokeGame.getTurnOrder().size()) {
             view(MokeGame.getTurnOrder().get(viewCommand - 1));
         } else if (viewCommand != 0) {
@@ -279,7 +305,12 @@ public class MokeApp {
         while (stillSelecting) {
             System.out.println("Please select your allies:\n\t0. Done with adding allies");
             printList(allAllies);
-            command = input.nextInt();
+            try {
+                command = input.nextInt();
+            } catch (InputMismatchException e) {
+                input.next();
+                command = -1;
+            }
             if (command <= allAllies.size() & command > 0) {
                 allies.add(inputAlly(command));
             } else if (command == 0) {
@@ -322,7 +353,12 @@ public class MokeApp {
         while (stillSelecting) {
             System.out.println("Please select your enemies:\n\t0. Done with adding enemies");
             printList(allEnemies);
-            command = input.nextInt();
+            try {
+                command = input.nextInt();
+            } catch (InputMismatchException e) {
+                input.next();
+                command = -1;
+            }
             if (command <= allEnemies.size() & command > 0) {
                 enemies.add(inputEnemy(command));
             } else if (command == 0) {
@@ -357,7 +393,12 @@ public class MokeApp {
     // EFFECTs: asks player if they want a tutorial, if yes print a short explanation
     private void askTutorial() {
         System.out.println("\nIs this your first time playing?\n\t1. Yes tutorial please\n\t2. I'm a pro!\n");
-        command = input.nextInt();
+        try {
+            command = input.nextInt();
+        } catch (InputMismatchException e) {
+            input.next();
+            command = -1;
+        }
         if (command != 2) {
             System.out.println("MOKE is a turn based game where you as allies will face off " 
                     + "against the evil Murky Water Cult on a board with tiles.\n"
