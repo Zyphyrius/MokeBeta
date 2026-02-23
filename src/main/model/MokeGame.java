@@ -2,8 +2,13 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 // an instance of the game that handles all characters and turn actions
-public class MokeGame {
+public class MokeGame implements Writable {
     private static ArrayList<Character> allies;
     private static ArrayList<Character> enemies;
     private static ArrayList<Character> turnOrder;
@@ -217,6 +222,24 @@ public class MokeGame {
 
     public boolean canMove() {
         return currentCharacter.getMovesLeft() > 0;
+    }
+
+    // EFFECTS: returns this as json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("turnIndex", turnIndex);
+        json.put("allies", charactersToJson(allies));
+        json.put("enemies", charactersToJson(enemies));
+        return json;
+    }
+
+    // EFFECTS: returns json array of list of given characters
+    private JSONArray charactersToJson(ArrayList<Character> characters) {
+        JSONArray jsonArray = new JSONArray();
+        for (Character c : characters) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
     }
     
 }

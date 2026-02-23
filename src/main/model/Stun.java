@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // A status effect that stuns the character, removing their attacks and moves
 public class Stun implements StatusEffect {
     int duration;
@@ -42,5 +44,13 @@ public class Stun implements StatusEffect {
     @Override
     public String toString() {
         return "stunned";
+    }
+
+    // EFFECTS: returns as a json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", "stun");
+        json.put("duration", duration);
+        return json;
     }
 }

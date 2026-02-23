@@ -2,8 +2,13 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 // Abstract class of a character, with all stats and standard version of game functions and no statuses
-public abstract class Character {
+public abstract class Character implements Writable {
     private String name;
     private int maxHealth;
     private int health;
@@ -130,7 +135,8 @@ public abstract class Character {
 
     // MODIFIES: this
     // EFFECTS: adds the status to statuses. 
-    //           if not stackable and if already has the status, keep the one with longer duration
+    //          if not stackable and if already has the status, keep the one with longer duration
+    //          apply effect after adding
     public void addStatus(StatusEffect status) {
         boolean shouldAdd = true;
         int toRemove = -1;
@@ -149,6 +155,7 @@ public abstract class Character {
         if (shouldAdd) {
             statuses.add(status);
         }
+        status.applyEffect(this);
     }
 
     // EFFECTS: applies all statuses on the character
@@ -272,5 +279,27 @@ public abstract class Character {
 
     public CharacterFilter getAttackFilter() {
         return charFilter;
+    }
+
+    // EFFECTS: returns as json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("hp", health);
+        json.put("x", cordX);
+        json.put("y", cordY);
+        json.put("atks left", attacksLeft);
+        json.put("moves left", movesLeft);
+        json.put("statuses", statusesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns all status effects as a json array
+    private JSONArray statusesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (StatusEffect s : statuses) {
+            jsonArray.put(s.toJson());
+        }
+        return jsonArray;
     }
 }

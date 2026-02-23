@@ -36,6 +36,7 @@ public class MokeApp {
     private String red = "\u001B[31m";
     private String blue = "\u001B[34m";
     private String resetColour = "\u001B[0m";
+    private static final String JSON_DEST = "mokegame.json";
 
     // EFFECTS: runs the best game ever (moke) and handles all inputs
     public MokeApp() {

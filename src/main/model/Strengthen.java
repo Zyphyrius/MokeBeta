@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // A status effect that buffs the character, increasing their atk by an amount
 public class Strengthen implements StatusEffect {
     int duration;
@@ -53,5 +55,14 @@ public class Strengthen implements StatusEffect {
     @Override
     public String toString() {
         return "strengthened by " + Integer.toString(attack) + " attack";
+    }
+
+    // EFFECTS: returns as a json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", "strengthen");
+        json.put("duration", duration);
+        json.put("attack", attack);
+        return json;
     }
 }

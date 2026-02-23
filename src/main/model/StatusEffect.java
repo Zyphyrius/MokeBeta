@@ -1,7 +1,9 @@
 package model;
 
+import persistence.Writable;
+
 // An abstract class representing a status effect on a character
-public interface StatusEffect {
+public interface StatusEffect extends Writable {
     // MODIFIES: Character
     // EFFECTS: performs the effect's ability on the affected character
     void applyEffect(Character affected);

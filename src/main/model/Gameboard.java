@@ -2,8 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 // Represents a board with tiles of dimensionns rowLength and columnLength
-public class Gameboard {
+public class Gameboard implements Writable {
     private ArrayList<Tile> tiles;
     private int rowLength;
     private int columnLength;
@@ -78,5 +82,13 @@ public class Gameboard {
 
     public int getRowLength() {
         return rowLength;
+    }
+
+    // EFFECTS: returns this as json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("rowLen", rowLength);
+        json.put("columnLen", columnLength);
+        return json;
     }
 }

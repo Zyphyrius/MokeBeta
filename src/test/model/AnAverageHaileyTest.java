@@ -27,6 +27,7 @@ public class AnAverageHaileyTest {
 
     @Test
     void testToString() {
-        assertEquals("An Average Hailey - A ranged unit that buffs allies on attack and can attack twice", aah.toString());
+        assertEquals("An Average Hailey - A ranged unit that buffs allies on attack and can attack twice",
+                aah.toString());
     }
 }

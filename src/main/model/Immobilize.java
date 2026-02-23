@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // A status effect that immobilizes the character, making them unable to move that isn't stackable
 public class Immobilize implements StatusEffect {
     int duration;
@@ -41,5 +43,13 @@ public class Immobilize implements StatusEffect {
     @Override
     public String toString() {
         return "immobilized";
+    }
+
+    // EFFECTS: returns as a json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", "immobilize");
+        json.put("duration", duration);
+        return json;
     }
 }
