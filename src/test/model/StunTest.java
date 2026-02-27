@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class StunTest {
     Character character;
     Stun stun;

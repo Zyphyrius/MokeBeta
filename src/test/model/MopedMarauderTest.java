@@ -9,6 +9,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class MopedMarauderTest {
     Character mm;
     Character c1;

@@ -5,6 +5,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class AnAverageHaileyTest {
     Character aah;
     Character c1;

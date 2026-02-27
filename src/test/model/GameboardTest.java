@@ -12,6 +12,9 @@ import static org.junit.Assert.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class GameboardTest {
     Character c1;
     Character c2;

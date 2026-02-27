@@ -23,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 // Referenced from the JsonSerialization Demo
 // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class JsonWriterTest {
     JsonWriter writer;
     JsonReader reader;

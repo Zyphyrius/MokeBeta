@@ -8,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class ImmobilizeTest {
     Character character;
     Immobilize immobilize;

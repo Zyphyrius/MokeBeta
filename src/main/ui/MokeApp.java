@@ -26,6 +26,9 @@ import model.MWCultist;
 import model.MWNukeRain;
 import model.MWTrooper;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class MokeApp {
     private Scanner input = new Scanner(System.in);
     private int command;
@@ -345,23 +348,7 @@ public class MokeApp {
     // REQUIRES: index <= allAllies.size()
     // EFFECTS: returns which ally should be added
     private Character inputAlly(int index) {
-        String allyName = charactersToNames(allAllies).get(index - 1);
-        switch (allyName) {
-            case "Lord Fishbowl":
-                return new LordFishbowl();
-            case "Hot Mould":
-                return new HotMould();
-            case "Fridge Wagon Motor":
-                return new FridgeWagonMotor();
-            case "Barcelona Beef Bogger":
-                return new BarcelonaBeefBogger();
-            case "Moped Marauder":
-                return new MopedMarauder();
-            case "An Average Hailey":
-                return new AnAverageHailey();
-            default:
-                return null;
-        }
+        return allAllies.get(index - 1).newCopy();
     }
 
     // MODIFIES: this
@@ -393,19 +380,7 @@ public class MokeApp {
     // REQUIRES: index <= allEnemies.size()
     // EFFECTS: returns which enemy should be added
     private Character inputEnemy(int index) {
-        String enemyName = charactersToNames(allEnemies).get(index - 1);
-        switch (enemyName) {
-            case "Murky Water Cultist":
-                return new MWCultist();
-            case "Murky Water Trooper":
-                return new MWTrooper();
-            case "Murky Water Berserker":
-                return new MWBerserker();
-            case "Murky Water Nuke Rain":
-                return new MWNukeRain();
-            default:
-                return null;
-        }
+        return allEnemies.get(index - 1).newCopy();
     }
 
     // MODIFIES: this

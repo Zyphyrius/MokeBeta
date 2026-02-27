@@ -12,6 +12,9 @@ import model.MokeGame;
 // Referenced from the JsonSerialization Demo
 // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
+@ExcludeFromJacocoGeneratedReport
 public class JsonReaderTest {
     JsonReader reader;
     MokeGame game;
