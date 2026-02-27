@@ -46,4 +46,9 @@ public class BarcelonaBeefBoggerTest {
     void testToString() {
         assertEquals("Barcelona Beef Bogger - A ranged unit that heals allies when killing enemies", bbb.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(bbb.getClass(), bbb.newCopy().getClass());
+    }
 }

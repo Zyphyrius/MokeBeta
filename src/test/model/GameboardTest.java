@@ -2,6 +2,10 @@ package model;
 
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -16,7 +20,7 @@ public class GameboardTest {
     @BeforeEach
     void runBefore() {
         c1 = new DummyCharacter("A", 100, 10, 2, 2, 2, "a dude", 0, 0, 1);
-        c2 = new DummyCharacter("B", 100, 100, 1, 2, 1, "strong", 0, 0, 1);
+        c2 = new DummyCharacter("B", 100, 100, 1, 2, 1, "strong", 1, 4, 1);
         gb = new Gameboard(5, 5);
     }
 
@@ -66,5 +70,12 @@ public class GameboardTest {
         gb.clearDeadCharacterTiles();
         assertEquals(null, gb.getTiles().get(0).getCharacter());
         assertEquals(c2, gb.getTiles().get(11).getCharacter());
+    }
+
+    @Test
+    void testPlaceAll() {
+        gb.placeAll(new ArrayList<Character>(List.of(c1, c2)));
+        assertEquals(c1, gb.getTiles().get(0).getCharacter());
+        assertEquals(c2, gb.getTiles().get(21).getCharacter());
     }
 }

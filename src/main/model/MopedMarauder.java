@@ -19,6 +19,12 @@ public class MopedMarauder extends Character {
         this.setAttackFilter(new EnemyFilter());
     }
 
+    // EFFECTS: returns a new copy of this character.
+    //          used for finding characters and making new instances of it
+    public Character newCopy() {
+        return new MopedMarauder();
+    }
+
     // REQUIRES: movesLeft > 0
     // MODIFIES: this
     // EFFECTS: moves character position coordinates up by 1

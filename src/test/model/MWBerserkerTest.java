@@ -35,4 +35,9 @@ public class MWBerserkerTest {
     void testToString() {
         assertEquals("Murky Water Berserker - A melee unit that consumes moves to do extra attacks", mwb.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(mwb.getClass(), mwb.newCopy().getClass());
+    }
 }

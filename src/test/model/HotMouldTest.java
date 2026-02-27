@@ -42,4 +42,9 @@ public class HotMouldTest {
     void testToString() {
         assertEquals("Hot Mould - A ranged unit that can heal allies or attack enemies", hm.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(hm.getClass(), hm.newCopy().getClass());
+    }
 }

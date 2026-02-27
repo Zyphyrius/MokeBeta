@@ -60,6 +60,15 @@ public class Gameboard implements Writable {
         findTile(x, y).setCharacter(character);
     }
 
+    // REQUIRES: all characters have different board positions
+    // MODIFIES: this
+    // EFFECTS: places all characters on board based on their x and y cords
+    public void placeAll(ArrayList<Character> characters) {
+        for (Character c : characters) {
+            placeCharacter(c.getX(), c.getY(), c);
+        }
+    }
+
     // MODIFIES: Tile
     // EFFECTS: filters the tiles by removing all dead characters
     public void clearDeadCharacterTiles() {

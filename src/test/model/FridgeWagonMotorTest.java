@@ -30,4 +30,9 @@ public class FridgeWagonMotorTest {
         assertEquals("Fridge Wagon Motor - A melee unit that moves fast and deals extra damage at low hp", 
                 fwm.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(fwm.getClass(), fwm.newCopy().getClass());
+    }
 }

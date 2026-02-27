@@ -35,8 +35,24 @@ public class MokeGame implements Writable {
         turnOrder = makeTurnOrder();
         turnIndex = 0;
         currentCharacter = turnOrder.get(0);
-        currentCharacter.setMovesLeft(currentCharacter.getMove());
-        currentCharacter.setAttacksLeft(currentCharacter.getAttacks());
+        setUpCharacter();
+        gameOver = false;
+    }
+
+    // REQUIRES: allies.size() > 0, enemies.size() > 0, columnLength > 0, rowLength > 0
+    //           each character has unique x,y position, turnIndex < turnOrder.size()
+    // EFFECTS: creates game state with given board size, then place all characters based off their x,y cords.
+    //          then set current character based off turn index and set gameOver to false
+    //          used for preset games and loading saved games
+    public MokeGame(int turnIndex, ArrayList<Character> allies, ArrayList<Character> enemies,
+            int columnLength, int rowLength) {
+        MokeGame.allies = allies;
+        MokeGame.enemies = enemies;
+        gameboard = new Gameboard(rowLength, columnLength);
+        turnOrder = makeTurnOrder();
+        gameboard.placeAll(turnOrder);
+        setCurrentCharacter(turnOrder.get(turnIndex));
+        currentCharacter.applyStatuses();
         gameOver = false;
     }
 
@@ -72,6 +88,11 @@ public class MokeGame implements Writable {
             turnIndex = 0;
         }
         currentCharacter = turnOrder.get(turnIndex);
+        setUpCharacter();
+    }
+
+    // EFFECTS: sets up current character by setting moves, attacks, and statuses
+    private void setUpCharacter() {
         currentCharacter.setMovesLeft(currentCharacter.getMove());
         currentCharacter.setAttacksLeft(currentCharacter.getAttacks());
         currentCharacter.applyStatuses();
@@ -230,6 +251,7 @@ public class MokeGame implements Writable {
         json.put("turnIndex", turnIndex);
         json.put("allies", charactersToJson(allies));
         json.put("enemies", charactersToJson(enemies));
+        json.put("gameboard", gameboard.toJson());
         return json;
     }
 
@@ -241,5 +263,4 @@ public class MokeGame implements Writable {
         }
         return jsonArray;
     }
-    
 }

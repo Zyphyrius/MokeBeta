@@ -45,4 +45,9 @@ public class LordFishbowlTest {
         assertEquals("Lord Fishbowl - A ranged unit that attacks twice and can't be attacked "
                 + "from far away enemies", lfb.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(lfb.getClass(), lfb.newCopy().getClass());
+    }
 }

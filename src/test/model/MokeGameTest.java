@@ -39,14 +39,33 @@ public class MokeGameTest {
     void testConstructor() {
         assertEquals(MokeGame.getAllies(), allies);
         assertEquals(MokeGame.getEnemies(), enemies);
-        assertEquals(mg.getGameboard().getTiles().size(), 25);
+        assertEquals(25, mg.getGameboard().getTiles().size());
+    }
+
+    @Test
+    void testPremadeConstructor() {
+        c1.setX(0);
+        c1.setY(0);
+        c2.setX(0);
+        c2.setY(1);
+        c3.setX(2);
+        c3.setY(2);
+        c4.setX(4);
+        c4.setY(4);
+        mg = new MokeGame(3, allies, enemies, 5, 6);
+        assertEquals(30, mg.getGameboard().getTiles().size());
+        assertEquals(c2, mg.getCurrentCharacter());
+        assertEquals(c1, mg.getGameboard().findTile(0, 0).getCharacter());
+        assertEquals(c2, mg.getGameboard().findTile(0, 1).getCharacter());
+        assertEquals(c3, mg.getGameboard().findTile(2, 2).getCharacter());
+        assertEquals(c4, mg.getGameboard().findTile(4, 4).getCharacter());
     }
 
     @Test 
     void testConstructorEnemiesLarger() {
         enemies.add(c2);
         mg = new MokeGame(allies, enemies);
-        assertEquals(mg.getGameboard().getTiles().size(), 36);
+        assertEquals(36, mg.getGameboard().getTiles().size());
     }
 
     @Test

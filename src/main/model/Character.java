@@ -25,6 +25,11 @@ public abstract class Character implements Writable {
     private CharacterFilter charFilter;
     private ArrayList<StatusEffect> statuses = new ArrayList<StatusEffect>();
 
+
+    // EFFECTS: returns a new copy of this character.
+    //          used for finding characters and making new instances of it
+    public abstract Character newCopy();
+
     // MODIFIES: this
     // EFFECTS: lose health equal to damage, if damage <= 0, do nothing
     //          if damage >= health, set health to 0
@@ -288,8 +293,8 @@ public abstract class Character implements Writable {
         json.put("hp", health);
         json.put("x", cordX);
         json.put("y", cordY);
-        json.put("atks left", attacksLeft);
-        json.put("moves left", movesLeft);
+        json.put("atksLeft", attacksLeft);
+        json.put("movesLeft", movesLeft);
         json.put("statuses", statusesToJson());
         return json;
     }

@@ -18,4 +18,10 @@ public class DummyCharacter extends Character {
         this.setY(cordY);
         this.setAttacks(attacks);
     }
+
+    // EFFECTS: returns a new copy of this character.
+    //          not needed for dummy character, so return null
+    public Character newCopy() {
+        return null;
+    }
 }

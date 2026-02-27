@@ -30,5 +30,10 @@ public class MWCultistTest {
     void testToString() {
         assertEquals("Murky Water Cultist - A melee unit that is weak and doesn't do much", mwc.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(mwc.getClass(), mwc.newCopy().getClass());
+    }
 }
 

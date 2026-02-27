@@ -16,6 +16,12 @@ public class MWCultist extends Character {
         this.setAttackFilter(new AllyFilter());
     }
 
+    // EFFECTS: returns a new copy of this character.
+    //          used for finding characters and making new instances of it
+    public Character newCopy() {
+        return new MWCultist();
+    }
+
     // EFFECTS: prints out a description of mw cultist
     @Override
     public String toString() {

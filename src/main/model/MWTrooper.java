@@ -16,6 +16,12 @@ public class MWTrooper extends Character {
         this.setAttackFilter(new AllyFilter());
     }
 
+    // EFFECTS: returns a new copy of this character.
+    //          used for finding characters and making new instances of it
+    public Character newCopy() {
+        return new MWTrooper();
+    }
+
     // REQUIRES: attacksLeft > 0
     // MODIFIES: this
     // EFFECTS: performs attack on a target and removes 1 from attacksLeft. if within range 1, do -10 damage

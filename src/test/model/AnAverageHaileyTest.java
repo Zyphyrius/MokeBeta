@@ -30,4 +30,9 @@ public class AnAverageHaileyTest {
         assertEquals("An Average Hailey - A ranged unit that buffs allies on attack and can attack twice",
                 aah.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(aah.getClass(), aah.newCopy().getClass());
+    }
 }

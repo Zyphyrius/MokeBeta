@@ -16,6 +16,12 @@ public class LordFishbowl extends Character {
         this.setAttackFilter(new EnemyFilter());
     }
 
+    // EFFECTS: returns a new copy of this character.
+    //          used for finding characters and making new instances of it
+    public Character newCopy() {
+        return new LordFishbowl();
+    }
+
     // MODIFIES: this
     // EFFECTS: lose health equal to damage, if damage <= 0 or enemy not in range, do nothing
     //          if damage >= health, set health to 0

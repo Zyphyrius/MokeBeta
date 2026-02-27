@@ -1,0 +1,50 @@
+{
+    "gameboard": {
+        "rowLen": 5,
+        "columnLen": 5
+    },
+    "turnIndex": 2,
+    "enemies": [{
+        "atksLeft": 0,
+        "name": "Murky Water Berserker 2",
+        "hp": 120,
+        "x": 0,
+        "y": 0,
+        "statuses": [
+            {
+                "duration": 2,
+                "name": "stun"
+            },
+            {
+                "duration": 1,
+                "attack": 10,
+                "name": "strengthen"
+            },
+            {
+                "duration": 5,
+                "name": "immobilize"
+            }
+        ],
+        "movesLeft": 0
+    }],
+    "allies": [
+        {
+            "atksLeft": 0,
+            "name": "Lord Fishbowl 1",
+            "hp": 100,
+            "x": 4,
+            "y": 0,
+            "statuses": [],
+            "movesLeft": 1
+        },
+        {
+            "atksLeft": 0,
+            "name": "Fridge Wagon Motor 2",
+            "hp": 180,
+            "x": 2,
+            "y": 3,
+            "statuses": [],
+            "movesLeft": 0
+        }
+    ]
+}

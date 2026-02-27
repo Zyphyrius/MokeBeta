@@ -28,4 +28,9 @@ public class MWNukeRainTest {
     void testToString() {
         assertEquals("Murky Water Nuke Rain - A low hp melee unit that stuns enemies hit", mwnr.toString());
     }
+
+    @Test
+    void testCopy() {
+        assertEquals(mwnr.getClass(), mwnr.newCopy().getClass());
+    }
 }

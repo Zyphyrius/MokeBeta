@@ -16,6 +16,12 @@ public class AnAverageHailey extends Character {
         this.setAttackFilter(new AllyFilter());
     }
 
+    // EFFECTS: returns a new copy of this character.
+    //          used for finding characters and making new instances of it
+    public Character newCopy() {
+        return new AnAverageHailey();
+    }
+
     // REQUIRES: attacksLeft > 0
     // MODIFIES: this
     // EFFECTS: performs strengthens target and removes 1 from attacksLeft

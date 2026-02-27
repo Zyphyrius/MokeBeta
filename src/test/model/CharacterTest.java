@@ -211,4 +211,9 @@ public class CharacterTest {
         assertEquals(0, c1.getMovesLeft());
         assertEquals(0, c1.getAttacksLeft());
     }
+
+    @Test
+    void testCopyDummy() {
+        assertEquals(null, c1.newCopy());
+    }
 }

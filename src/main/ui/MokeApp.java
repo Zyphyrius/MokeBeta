@@ -3,7 +3,11 @@ package ui;
 import model.MokeGame;
 import model.MopedMarauder;
 import model.Tile;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -29,14 +33,18 @@ public class MokeApp {
     private Character current;
     private EnemyAI enemyAI;
     private boolean newTurn;
-    private static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
+    public static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
         new FridgeWagonMotor(), new BarcelonaBeefBogger(), new MopedMarauder(), new AnAverageHailey()));
-    private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
+    public static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
         new MWBerserker(), new MWNukeRain()));
     private String red = "\u001B[31m";
     private String blue = "\u001B[34m";
     private String resetColour = "\u001B[0m";
-    private static final String JSON_DEST = "mokegame.json";
+    private static final String JSON_DEST = "C:/Users/Matthew Kwan/OneDrive - UBC/cpsc 210/ProjectStarter/data/mokeGameSave.json";
+    //private static final String JSON_DEST = "../data/mokeGameSave.json";
+    private boolean didSave;
+    private JsonReader jsonReader = new JsonReader(JSON_DEST);
+    private JsonWriter jsonWriter = new JsonWriter(JSON_DEST);
 
     // EFFECTS: runs the best game ever (moke) and handles all inputs
     public MokeApp() {
@@ -47,7 +55,7 @@ public class MokeApp {
     // EFFECTS: starts game and processes inputs while game isnt over
     private void runMoke() {
         init();
-        while (!game.isGameOver()) {
+        while (!game.isGameOver() & !didSave) {
             printBoard();
             System.out.println("\nTurn Order:");
             printList(charactersToNames(MokeGame.getTurnOrder()));
@@ -72,16 +80,20 @@ public class MokeApp {
 
     // MODIFIES: this
     // EFFECTS: asks if tutorial needed then for character inputs and if AI is needed, 
-    //          then initializes board, character names, and starts new turn
+    //          then initializes board, character names, and starts new turn unless load previous game
+    //          sets did save to false
     private void init() {
         System.out.println("Welcome to MOKE!\n");
         askTutorial();
-        inputCharacters();
-        game.startBoard();
+        if (!askLoad()) {
+            inputCharacters();
+            game.startBoard();
+            numberCharacters();
+        }
         enemyAINeeded();
-        numberCharacters();
         current = game.getCurrentCharacter();
         newTurn = true;
+        didSave = false;
     }
 
     // EFFECTS: return player's turn input or enemy ais input depending on the current character and if ai is wanted
@@ -89,7 +101,7 @@ public class MokeApp {
         if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
             return enemyAI.determineAction(current);
         } else {
-            System.out.println("\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede");
+            System.out.println("\n\t1. Attack\n\t2. Move\n\t3. View\n\t4. End Turn\n\t5. Concede\n\t6. Save and Quit");
             try {
                 return input.nextInt();
             } catch (InputMismatchException e) {
@@ -175,6 +187,9 @@ public class MokeApp {
                 break;
             case 5:
                 game.setGameOver(false);
+                break;
+            case 6:
+                saveGame();
                 break;
             default:
                 System.out.println("Invalid input\n");
@@ -271,11 +286,14 @@ public class MokeApp {
     }
 
     // EFFECTS: gives a finishing prompt after the game is over
+    //          if saved and quit, then dont say win/loss message
     private void gameOver() {
-        if (game.didWin()) {
-            System.out.println("ALLIES WON!!!");
-        } else {
-            System.out.println("allies lost...");
+        if (!didSave) {
+            if (game.didWin()) {
+                System.out.println("ALLIES WON!!!");
+            } else {
+                System.out.println("allies lost...");
+            }
         }
         System.out.println("bye! hope you had fun!");
     }
@@ -484,4 +502,50 @@ public class MokeApp {
         return count;
     }
 
+    // EFFECTS: asks player if they want to load a previous saved game
+    //          returns true if loaded successfully, false if not
+    private boolean askLoad() {
+        System.out.println("Would you like to load a previous save file?\n\t1. yes\n\t2. no\n");
+        try {
+            command = input.nextInt();
+        } catch (InputMismatchException e) {
+            input.next();
+            command = 2;
+        }
+        if (command == 1) {
+            loadGame();
+            if (game != null) {
+                return true;
+            }
+        }
+        System.out.println("Did not load game\n");
+        return false;
+    }
+
+    // Referenced from the JsonSerialization Demo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
+    // EFFECTS: saves game and closes
+    private void saveGame() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(game);
+            jsonWriter.close();
+            System.out.println("Saved game to " + JSON_DEST);
+            gameOver();
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_DEST);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads game from file
+    private void loadGame() {
+        try {
+            game = jsonReader.read();
+            System.out.println("Loaded game from " + JSON_DEST + "\n");
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_DEST + "\n");
+        }
+    }
 }
