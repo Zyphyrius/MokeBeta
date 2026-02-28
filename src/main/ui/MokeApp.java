@@ -43,8 +43,8 @@ public class MokeApp {
     private String red = "\u001B[31m";
     private String blue = "\u001B[34m";
     private String resetColour = "\u001B[0m";
-    private static final String JSON_DEST = "C:/Users/Matthew Kwan/OneDrive - UBC/cpsc 210/ProjectStarter/data/mokeGameSave.json";
-    //private static final String JSON_DEST = "../data/mokeGameSave.json";
+    //private static final String JSON_DEST = "C:/Users/Matthew Kwan/OneDrive - UBC/cpsc 210/ProjectStarter/data/mokeGameSave.json";
+    private static final String JSON_DEST = "./data/mokeGameSave.json";
     private boolean didSave;
     private JsonReader jsonReader = new JsonReader(JSON_DEST);
     private JsonWriter jsonWriter = new JsonWriter(JSON_DEST);
@@ -172,7 +172,6 @@ public class MokeApp {
         }
     }
 
-    // MODIFIES: MokeGame
     // EFFECTS: handles the command and performs the turn action
     private void handleTurn(int command) {
         switch (command) {
@@ -507,7 +506,7 @@ public class MokeApp {
             jsonWriter.write(game);
             jsonWriter.close();
             System.out.println("Saved game to " + JSON_DEST);
-            gameOver();
+            didSave = true;
         } catch (FileNotFoundException e) {
             System.out.println("Unable to write to file: " + JSON_DEST);
         }

@@ -77,7 +77,7 @@ public class JsonReader {
     private Character parseCharacter(JSONObject json) {
         String name = json.getString("name");
         ArrayList<Character> allCharacters = new ArrayList<Character>(MokeApp.allAllies);
-        allCharacters.addAll(MokeGame.getEnemies());
+        allCharacters.addAll(MokeApp.allEnemies);
         for (Character c : allCharacters) {
             if (name.contains(c.getName())) {
                 Character newChar = c.newCopy();
