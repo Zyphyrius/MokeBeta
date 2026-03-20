@@ -14,6 +14,7 @@ import model.StatusEffect;
 import model.Strengthen;
 import model.Stun;
 import ui.MokeApp;
+import ui.MokeGUI;
 import model.Character;
 import model.Immobilize;
 
@@ -76,8 +77,8 @@ public class JsonReader {
     //          return null if cant find
     private Character parseCharacter(JSONObject json) {
         String name = json.getString("name");
-        ArrayList<Character> allCharacters = new ArrayList<Character>(MokeApp.allAllies);
-        allCharacters.addAll(MokeApp.allEnemies);
+        ArrayList<Character> allCharacters = new ArrayList<Character>(MokeGUI.getAllAllies());
+        allCharacters.addAll(MokeGUI.getAllEnemies());
         for (Character c : allCharacters) {
             if (name.contains(c.getName())) {
                 Character newChar = c.newCopy();

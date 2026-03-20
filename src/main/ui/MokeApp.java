@@ -43,7 +43,6 @@ public class MokeApp {
     private String red = "\u001B[31m";
     private String blue = "\u001B[34m";
     private String resetColour = "\u001B[0m";
-    //private static final String JSON_DEST = "C:/Users/Matthew Kwan/OneDrive - UBC/cpsc 210/ProjectStarter/data/mokeGameSave.json";
     private static final String JSON_DEST = "./data/mokeGameSave.json";
     private boolean didSave;
     private JsonReader jsonReader = new JsonReader(JSON_DEST);
