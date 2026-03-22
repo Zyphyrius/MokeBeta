@@ -3,9 +3,7 @@ package ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -33,16 +31,7 @@ public class CharacterPickerGUI extends CharacterViewGUI {
         super(gui);
         viewIndex = 0;
         currentCharacters = new ArrayList<>();
-        ArrayList<String> characterNames = mokeGUI.charactersToNames(characters);
-        characterCombo = new JComboBox<>(characterNames.toArray(new String[characterNames.size()]));
-        characterCombo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                viewIndex = characterCombo.getSelectedIndex();
-                view(characters.get(viewIndex));
-            }
-        });
-        characterCombo.setAlignmentX(LEFT_ALIGNMENT);
-        add(characterCombo);
+        addComboBox(characters);
         addButton = new JButton("Add");
         addButton.setActionCommand("add");
         addButton.addActionListener(new ActionListener() {
@@ -57,6 +46,20 @@ public class CharacterPickerGUI extends CharacterViewGUI {
         currentCharactersLabel.setAlignmentX(LEFT_ALIGNMENT);
         add(currentCharactersLabel);
         view(characters.get(0));
+    }
+
+    // EFFECTS: creates combo box and adds it
+    private void addComboBox(ArrayList<Character> characters) {
+        ArrayList<String> characterNames = mokeGUI.charactersToNames(characters);
+        characterCombo = new JComboBox<>(characterNames.toArray(new String[characterNames.size()]));
+        characterCombo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewIndex = characterCombo.getSelectedIndex();
+                view(characters.get(viewIndex));
+            }
+        });
+        characterCombo.setAlignmentX(LEFT_ALIGNMENT);
+        add(characterCombo);
     }
 
     @Override

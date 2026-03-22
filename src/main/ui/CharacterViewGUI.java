@@ -22,12 +22,14 @@ public class CharacterViewGUI extends JPanel {
     protected MokeGUI mokeGUI;
 
     // EFFECTS: creates a viewer panel with a done button
-    public CharacterViewGUI(MokeGUI gui) {
-        mokeGUI = gui;
+    public CharacterViewGUI(MokeGUI mgui) {
+        mokeGUI = mgui;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         characterPanel = new JPanel();
         characterPanel.setAlignmentX(LEFT_ALIGNMENT);
+        characterPanel.setPreferredSize(new Dimension((int) (mokeGUI.getWidth() * 0.5),
+                            (int) (mokeGUI.getHeight() * 0.5)));
         add(characterPanel);
         
 
@@ -60,17 +62,19 @@ public class CharacterViewGUI extends JPanel {
                     + "<br>range: " + c.getRange() 
                     + "<br>moves: " + c.getMove() 
                     + "<br>spd: " + c.getSpeed() 
-                    + "<br>ability: " + c.getAbility() + "<br><html>";
+                    + "<br>ability: " + c.getAbility() + "<br>";
         if (!c.getStatuses().isEmpty()) {
-            output = output + "statuses: " + c.getStatuses();
+            output += "statuses: " + c.getStatuses();
         }
+        output += "</html>";
         descriptionLabel.setText(output);
 
-        // TODO
-        remoeExistingImage();
+        removeExistingImage();
+        characterImage = new JLabel(mokeGUI.getCharacterIcon(c));
+        characterPanel.add(characterImage);
     }
 
-    private void remoeExistingImage() {
+    private void removeExistingImage() {
         if (characterImage != null) {
             characterPanel.remove(characterImage);
         }

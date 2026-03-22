@@ -22,7 +22,7 @@ public class BoardGUI extends JPanel {
 
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                TileButton tileButton = new TileButton(column, row, mgui, ggui);
+                TileButton tileButton = new TileButton(column, row, mgui);
                 tiles[column][row] = tileButton;
                 add(tileButton);
             }

@@ -5,8 +5,6 @@ import javax.swing.*;
 import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,8 +73,13 @@ public class MokeGUI extends JFrame {
         super("Moke");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
-        width = (int) (scrn.width * 0.8);
-        height = (int) (scrn.height * 0.8);
+        width = (int) (scrn.width * 0.9);
+        height = (int) (scrn.height * 0.9);
+        if (width > height) {
+            width = height;
+        } else {
+            height = width;
+        }
         init();
         this.setSize(width, height);
         centreOnScreen();
@@ -327,6 +330,7 @@ public class MokeGUI extends JFrame {
     // EFFECTS: makes it game over
     public void concede() {
         game.setGameOver(false);
+        gameOver();
     }
 
     // EFFECTS: ends the turn and starts new turn

@@ -1,14 +1,10 @@
 package ui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import model.Character;
 

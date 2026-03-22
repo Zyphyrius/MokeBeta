@@ -8,8 +8,6 @@ import model.Character;
 
 import java.util.ArrayList;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -22,7 +20,6 @@ public class TileButton extends JPanel {
     private int cordX;
     private int cordY;
     private MokeGUI mokeGUI;
-    private GameGUI gameGUI;
 
     private Image characterImage;
     private JLabel nameLabel;
@@ -30,16 +27,16 @@ public class TileButton extends JPanel {
     // EFFECTS: creates a tile with a name and character image both empty
     //          and the x,y coordinate of the tile
     //          calls tileEvent when clicked
-    public TileButton(int x, int y, MokeGUI mgui, GameGUI ggui) {
+    public TileButton(int x, int y, MokeGUI mgui) {
         cordX = x;
         cordY = y;
         mokeGUI = mgui;
-        gameGUI = ggui;
         setLayout(new BorderLayout());
         setBackground(Color.GRAY);
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         setOpaque(true);
         nameLabel = new JLabel();
+        nameLabel.setForeground(Color.WHITE);
         add(nameLabel, BorderLayout.NORTH);
 
         addMouseListener(new MouseAdapter() {
@@ -64,20 +61,20 @@ public class TileButton extends JPanel {
         } else {
             setBackground(Color.GRAY);
         }
-        repaint();
     }
 
     // EFFECTS: checks to see if the tile has a character and updates image
     //          and updates background
     public void updateTile() {
-        /*
         Tile tile = mokeGUI.getGame().getGameboard().findTile(cordX, cordY);
         if (tile.getCharacter() != null) {
             characterImage = mokeGUI.getCharacterIcon(tile.getCharacter()).getImage();
+            nameLabel.setText("<html>" + tile.getCharacter().getName() + "<br>"
+                    + tile.getCharacter().getHealth() + "/" + tile.getCharacter().getMaxHealth() + "</hmtl>");
         } else {
             characterImage = null;
+            nameLabel.setText("");
         }
-            */
         updateBackground();
         repaint();
     }
@@ -86,7 +83,12 @@ public class TileButton extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (characterImage != null) {
-            g.drawImage(characterImage, 0, 0, getWidth(), getHeight(), null);
+            int width = getWidth();
+            int height = getHeight();
+            int sideMargin = (int) (width * 0.1);
+            int topMargin = (int) (height * 0.3);
+            g.drawImage(characterImage, sideMargin, topMargin, 
+                    width - 2 * sideMargin, height - topMargin, null);
         }
     }
 }

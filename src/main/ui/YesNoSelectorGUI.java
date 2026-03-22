@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

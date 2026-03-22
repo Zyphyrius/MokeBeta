@@ -1,25 +1,50 @@
 {
     "gameboard": {
-        "rowLen": 4,
-        "columnLen": 4
+        "rowLen": 5,
+        "columnLen": 5
     },
-    "turnIndex": 0,
-    "enemies": [{
-        "atksLeft": 0,
-        "name": "Murky Water Cultist",
-        "hp": 40,
-        "x": 0,
-        "y": 0,
-        "statuses": [],
-        "movesLeft": 0
-    }],
-    "allies": [{
-        "atksLeft": 2,
-        "name": "Lord Fishbowl",
-        "hp": 100,
-        "x": 3,
-        "y": 3,
-        "statuses": [],
-        "movesLeft": 2
-    }]
+    "turnIndex": 2,
+    "enemies": [
+        {
+            "atksLeft": 0,
+            "name": "Murky Water Nuke Rain",
+            "hp": 30,
+            "x": 2,
+            "y": 1,
+            "statuses": [],
+            "movesLeft": 1
+        },
+        {
+            "atksLeft": 0,
+            "name": "Murky Water Cultist",
+            "hp": 40,
+            "x": 1,
+            "y": 0,
+            "statuses": [],
+            "movesLeft": 0
+        }
+    ],
+    "allies": [
+        {
+            "atksLeft": 0,
+            "name": "Hot Mould",
+            "hp": 100,
+            "x": 3,
+            "y": 2,
+            "statuses": [{
+                "duration": 1,
+                "name": "stun"
+            }],
+            "movesLeft": 0
+        },
+        {
+            "atksLeft": 1,
+            "name": "Lord Fishbowl",
+            "hp": 100,
+            "x": 2,
+            "y": 3,
+            "statuses": [],
+            "movesLeft": 0
+        }
+    ]
 }

@@ -13,7 +13,6 @@ import model.MokeGame;
 import model.StatusEffect;
 import model.Strengthen;
 import model.Stun;
-import ui.MokeApp;
 import ui.MokeGUI;
 import model.Character;
 import model.Immobilize;
