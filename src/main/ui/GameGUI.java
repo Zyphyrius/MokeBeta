@@ -55,11 +55,21 @@ public class GameGUI extends JPanel {
         boardGUI.updateTiles();
     }
 
+    // EFFECTS: sets action box to empty
+    public void showEmpty() {
+        actionBox.showEmpty();
+    }
+
+    // EFFECTS: shows main menu in action box
+    public void showMainMenu() {
+        actionBox.mainMenu();
+    }
+
     // EFFECTS: updates dialogue according to current panel
     private void updateDialogue() {
         String currentPanel = actionBox.getCurrentPanel();
         Character current = mokeGUI.getCurrent();
-        if (currentPanel.equals("MAIN")) {
+        if (currentPanel.equals("MAIN") || currentPanel.equals("EMPTY")) {
             dialogueLabel.setText("It's " + current.getName() + "'s turn!");
         } else if (currentPanel.equals("ATTACK")) {
             dialogueLabel.setText(Integer.toString(current.getAttacksLeft()) + " attacks left");

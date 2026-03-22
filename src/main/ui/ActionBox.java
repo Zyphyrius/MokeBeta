@@ -28,6 +28,7 @@ public class ActionBox extends JPanel {
 
     private JPanel mainPanel;
     private JPanel movePanel;
+    private JLabel emptyLabel;
 
     private MokeGUI mokeGUI;
     private CardLayout actionLayout;
@@ -35,11 +36,23 @@ public class ActionBox extends JPanel {
 
     // EFFECTS: creates an action box that can switch between
     //          start, attack, and move layouts
+    //          and an empty panel for when it is the enemy AI's turn
     public ActionBox(MokeGUI mgui) {
         mokeGUI = mgui;
         actionLayout = new CardLayout();
         setLayout(actionLayout);
         initButtons();
+        setUpMain();
+        add(attackBackButton, "ATTACK");
+        setUpMove();
+        emptyLabel = new JLabel("");
+        add(emptyLabel, "EMPTY");
+        actionLayout.show(this, "MAIN");
+        currentPanel = "MAIN";
+    }
+
+    // EFFECTS: sets up main panel
+    private void setUpMain() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout());
         mainPanel.add(attackButton);
@@ -48,7 +61,10 @@ public class ActionBox extends JPanel {
         mainPanel.add(concedeButton);
         mainPanel.add(saveButton);
         add(mainPanel, "MAIN");
-        add(attackBackButton, "ATTACK");
+    }
+
+    // EFFECTS: sets up move panel
+    private void setUpMove() {
         movePanel = new JPanel();
         movePanel.setLayout(new BorderLayout());
         movePanel.add(upButton, BorderLayout.NORTH);
@@ -57,8 +73,6 @@ public class ActionBox extends JPanel {
         movePanel.add(rightButton, BorderLayout.EAST);
         movePanel.add(moveBackButton, BorderLayout.CENTER);
         add(movePanel, "MOVE");
-        actionLayout.show(this, "MAIN");
-        currentPanel = "MAIN";
     }
 
     // EFFECTS: initializes all buttons
@@ -93,14 +107,14 @@ public class ActionBox extends JPanel {
         });
         attackBackButton = createButton("BACK", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                backPressed();
+                mainMenu();
                 mokeGUI.setAttackView(false);
                 mokeGUI.updateAll();
             }
         });
         moveBackButton = createButton("BACK", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                backPressed();
+                mainMenu();
             }
         });
         leftButton = createButton("LEFT", new ActionListener() {
@@ -126,7 +140,7 @@ public class ActionBox extends JPanel {
     }
 
     // EFFECTS: brings player back to main panel
-    private void backPressed() {
+    public void mainMenu() {
         actionLayout.show(this, "MAIN");
         currentPanel = "MAIN";
     }
@@ -141,6 +155,12 @@ public class ActionBox extends JPanel {
     private void attackPressed() {
         actionLayout.show(this, "ATTACK");
         currentPanel = "ATTACK";
+    }
+
+    // EFFECTS: brings player to empty panel
+    public void showEmpty() {
+        actionLayout.show(this, "EMPTY");
+        currentPanel = "EMPTY";
     }
 
     public String getCurrentPanel() {

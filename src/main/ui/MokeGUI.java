@@ -123,6 +123,7 @@ public class MokeGUI extends JFrame {
     private void newTurn() {
         if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
             startAiTurn();
+            System.out.println("bruh");
         } else {
             updateAll();
         }
@@ -130,7 +131,55 @@ public class MokeGUI extends JFrame {
 
     // EFFECTS: controls and displays the enemy ai during their turn
     private void startAiTurn() {
+        gamePanel.showEmpty();
+        enemyAI.setAttacked(false);
+        enemyAI.setMoved(false);
+        Timer timer = new Timer(800, e -> {
+            {
+                updateAll();
+                int action = enemyAI.determineAction(current);
+                if (action == 2) {
+                    aiMovement();
+                } else if (action == 1) {
+                    aiAttack();
+                } else if (action == 4) {
+                    ((Timer) e.getSource()).stop();
+                    endTurn();
+                    gamePanel.showMainMenu();
+                }
+            }
+        });
+        timer.start();
+    }
 
+    // EFFECTS: performs enemy ai's movement
+    private void aiMovement() {
+        int action = enemyAI.determineMove(current);
+        switch (action) {
+            case 1:
+                movementPressed("up");
+                break;
+            case 2:
+                movementPressed("down");
+                break;
+            case 3:
+                movementPressed("left");
+                break;
+            case 4:
+                movementPressed("right");
+                break;
+            default:
+                break;
+        }
+    }
+
+    // EFFECTS: performs enemy ai's attack
+    private void aiAttack() {
+        ArrayList<Character> targets = current.getInRange(current.getAttackFilter(), current.getRange());
+        int target = enemyAI.determineAttack(current) - 1;
+        if (target != -1) {
+            attack(current, targets.get(target));
+        }
     }
 
     // MODIFIES: this
@@ -216,15 +265,20 @@ public class MokeGUI extends JFrame {
                 if (current.getAttacksLeft() > 0 
                         && current.getInRange(current.getAttackFilter(),
                              current.getRange()).contains(tile.getCharacter())) {
-                    current.attack(tile.getCharacter());
-                    updateAll();
-                    gamePanel.addDialogue(current.getName() + " attacked " + tile.getCharacter().getName() + "!");
+                    attack(current, tile.getCharacter());
                 }
             } else {
                 viewerPanel.view(tile.getCharacter());
                 mokeLayout.show(mainPanel, "View");
             }
         }
+    }
+
+    // EFFECTS: performs attack, updates, then adds dialogue
+    private void attack(Character attacker, Character defender) {
+        attacker.attack(defender);
+        updateAll();
+        gamePanel.addDialogue(attacker.getName() + " attacked " + defender.getName() + "!");
     }
 
     // EFFECTS: returns back to gameboard after done viewing
