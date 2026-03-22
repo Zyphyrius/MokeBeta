@@ -1,48 +1,63 @@
 {
     "gameboard": {
-        "rowLen": 5,
-        "columnLen": 5
+        "rowLen": 7,
+        "columnLen": 7
     },
-    "turnIndex": 2,
+    "turnIndex": 4,
     "enemies": [
         {
-            "atksLeft": 0,
-            "name": "Murky Water Nuke Rain",
-            "hp": 30,
-            "x": 2,
-            "y": 1,
+            "atksLeft": 1,
+            "name": "Murky Water Cultist",
+            "hp": 40,
+            "x": 0,
+            "y": 2,
             "statuses": [],
-            "movesLeft": 1
+            "movesLeft": 0
         },
         {
-            "atksLeft": 0,
+            "atksLeft": 1,
             "name": "Murky Water Cultist",
             "hp": 40,
             "x": 1,
-            "y": 0,
+            "y": 2,
+            "statuses": [],
+            "movesLeft": 0
+        },
+        {
+            "atksLeft": 1,
+            "name": "Murky Water Cultist",
+            "hp": 40,
+            "x": 2,
+            "y": 2,
+            "statuses": [],
+            "movesLeft": 0
+        },
+        {
+            "atksLeft": 1,
+            "name": "Murky Water Berserker",
+            "hp": 120,
+            "x": 3,
+            "y": 4,
             "statuses": [],
             "movesLeft": 0
         }
     ],
     "allies": [
         {
-            "atksLeft": 0,
-            "name": "Hot Mould",
-            "hp": 100,
-            "x": 3,
-            "y": 2,
-            "statuses": [{
-                "duration": 1,
-                "name": "stun"
-            }],
-            "movesLeft": 0
+            "atksLeft": 1,
+            "name": "Moped Marauder",
+            "hp": 70,
+            "x": 6,
+            "y": 6,
+            "statuses": [],
+            "movesLeft": 5
         },
         {
-            "atksLeft": 1,
-            "name": "Lord Fishbowl",
-            "hp": 100,
-            "x": 2,
-            "y": 3,
+            "atksLeft": 0,
+            "name": "Moped Marauder",
+            "hp": 70,
+            "x": 5,
+            "y": 6,
             "statuses": [],
             "movesLeft": 0
         }

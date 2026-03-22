@@ -61,6 +61,7 @@ public class MokeGUI extends JFrame {
     private ArrayList<Character> allies;
     private ArrayList<Character> enemies;
     private boolean inAttackView;
+    private boolean enemyTurn;
 
     private static final String JSON_DEST = "./data/mokeGameSave.json";
     private boolean didSave;
@@ -122,13 +123,14 @@ public class MokeGUI extends JFrame {
     }
 
     // EFFECTS: determines if the next turn is a player controlled turn or not
-    //          then starts correct turn
+    //          then starts correct turn and sets enemyTurn to true if ai is in control
     private void newTurn() {
         if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
             startAiTurn();
-            System.out.println("bruh");
+            enemyTurn = true;
         } else {
             updateAll();
+            enemyTurn = false;
         }
     }
 
@@ -147,8 +149,8 @@ public class MokeGUI extends JFrame {
                     aiAttack();
                 } else if (action == 4) {
                     ((Timer) e.getSource()).stop();
-                    endTurn();
                     gamePanel.showMainMenu();
+                    endTurn();
                 }
             }
         });
@@ -258,21 +260,24 @@ public class MokeGUI extends JFrame {
 
     // REQUIRES: x and y < gameboard width/height
     // EFFECTS: does the proper action when a tile at position x,y is pressed
+    //          if enemy turn, do nothing
     //          if tile has no character on it, do nothing
     //          if in attack view, attack the character on the tile
     //          if not in attack view, view the character
     public void tileEvent(int x, int y) {
-        Tile tile = game.getGameboard().findTile(x, y);
-        if (tile.getCharacter() != null) {
-            if (inAttackView) {
-                if (current.getAttacksLeft() > 0 
-                        && current.getInRange(current.getAttackFilter(),
-                             current.getRange()).contains(tile.getCharacter())) {
-                    attack(current, tile.getCharacter());
+        if (!enemyTurn) {
+            Tile tile = game.getGameboard().findTile(x, y);
+            if (tile.getCharacter() != null) {
+                if (inAttackView) {
+                    if (current.getAttacksLeft() > 0 
+                            && current.getInRange(current.getAttackFilter(),
+                                current.getRange()).contains(tile.getCharacter())) {
+                        attack(current, tile.getCharacter());
+                    }
+                } else {
+                    viewerPanel.view(tile.getCharacter());
+                    mokeLayout.show(mainPanel, "View");
                 }
-            } else {
-                viewerPanel.view(tile.getCharacter());
-                mokeLayout.show(mainPanel, "View");
             }
         }
     }

@@ -36,7 +36,8 @@ public class CharacterPickerGUI extends CharacterViewGUI {
         addButton.setActionCommand("add");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                currentCharacters.add(characters.get(viewIndex));
+                Character c = characters.get(viewIndex).newCopy();
+                currentCharacters.add(c);
                 currentCharactersLabel.setText(mokeGUI.charactersToNames(currentCharacters).toString());
             }
         });
