@@ -27,9 +27,12 @@ public class CharacterViewGUI extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         characterPanel = new JPanel();
+        characterPanel.setAlignmentX(LEFT_ALIGNMENT);
         add(characterPanel);
+        
 
         descriptionLabel = new JLabel("");
+        descriptionLabel.setAlignmentX(LEFT_ALIGNMENT);
         add(descriptionLabel);
 
         doneButton = new JButton("Done");
@@ -39,12 +42,13 @@ public class CharacterViewGUI extends JPanel {
                 doneViewing();
             }
         });
+        doneButton.setAlignmentX(LEFT_ALIGNMENT);
         add(doneButton);
     }
 
     // EFFECTS: tells moke gui that it is finished viewing and returns to gameboard
     public void doneViewing() {
-        
+        mokeGUI.doneViewing();
     }
 
     // EFFECTS: views character and their stats + description + statuses if any

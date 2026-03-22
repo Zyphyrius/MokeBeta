@@ -31,6 +31,7 @@ public class ActionBox extends JPanel {
 
     private MokeGUI mokeGUI;
     private CardLayout actionLayout;
+    private String currentPanel;
 
     // EFFECTS: creates an action box that can switch between
     //          start, attack, and move layouts
@@ -52,11 +53,12 @@ public class ActionBox extends JPanel {
         movePanel.setLayout(new BorderLayout());
         movePanel.add(upButton, BorderLayout.NORTH);
         movePanel.add(downButton, BorderLayout.SOUTH);
-        movePanel.add(leftButton, BorderLayout.EAST);
-        movePanel.add(rightButton, BorderLayout.WEST);
+        movePanel.add(leftButton, BorderLayout.WEST);
+        movePanel.add(rightButton, BorderLayout.EAST);
         movePanel.add(moveBackButton, BorderLayout.CENTER);
         add(movePanel, "MOVE");
         actionLayout.show(this, "MAIN");
+        currentPanel = "MAIN";
     }
 
     // EFFECTS: initializes all buttons
@@ -66,6 +68,7 @@ public class ActionBox extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 attackPressed();
                 mokeGUI.setAttackView(true);
+                mokeGUI.updateAll();
             }
         });
         moveButton = createButton("MOVE", new ActionListener() {
@@ -75,23 +78,24 @@ public class ActionBox extends JPanel {
         });
         endButton = createButton("END", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.endTurn();
             }
         });
         concedeButton = createButton("CONCEDE", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.concede();
             }
         });
-        saveButton = createButton("SAVE", new ActionListener() {
+        saveButton = createButton("SAVE+QUIT", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.saveGame();
             }
         });
         attackBackButton = createButton("BACK", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 backPressed();
                 mokeGUI.setAttackView(false);
+                mokeGUI.updateAll();
             }
         });
         moveBackButton = createButton("BACK", new ActionListener() {
@@ -101,22 +105,22 @@ public class ActionBox extends JPanel {
         });
         leftButton = createButton("LEFT", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.movementPressed("left");
             }
         });
         rightButton = createButton("RIGHT", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.movementPressed("right");
             }
         });
         upButton = createButton("UP", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.movementPressed("up");
             }
         });
         downButton = createButton("DOWN", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                mokeGUI.movementPressed("down");
             }
         });
     }
@@ -124,16 +128,23 @@ public class ActionBox extends JPanel {
     // EFFECTS: brings player back to main panel
     private void backPressed() {
         actionLayout.show(this, "MAIN");
+        currentPanel = "MAIN";
     }
 
     // EFFECTS: brings player to move panel
     private void movePressed() {
         actionLayout.show(this, "MOVE");
+        currentPanel = "MOVE";
     }
 
     // EFFECTS: brings player attack panel
     private void attackPressed() {
         actionLayout.show(this, "ATTACK");
+        currentPanel = "ATTACK";
+    }
+
+    public String getCurrentPanel() {
+        return currentPanel;
     }
 
     // EFFECTS: creates a button with given parameters and returns it

@@ -41,6 +41,7 @@ public class CharacterPickerGUI extends CharacterViewGUI {
                 view(characters.get(viewIndex));
             }
         });
+        characterCombo.setAlignmentX(LEFT_ALIGNMENT);
         add(characterCombo);
         addButton = new JButton("Add");
         addButton.setActionCommand("add");
@@ -50,8 +51,10 @@ public class CharacterPickerGUI extends CharacterViewGUI {
                 currentCharactersLabel.setText(mokeGUI.charactersToNames(currentCharacters).toString());
             }
         });
+        addButton.setAlignmentX(LEFT_ALIGNMENT);
         add(addButton);
         currentCharactersLabel = new JLabel("Please input characters you want to have in your game");
+        currentCharactersLabel.setAlignmentX(LEFT_ALIGNMENT);
         add(currentCharactersLabel);
         view(characters.get(0));
     }

@@ -22,18 +22,18 @@ public class BoardGUI extends JPanel {
 
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                TileButton tileButton = new TileButton(row, column, mgui, ggui);
-                tiles[row][column] = tileButton;
+                TileButton tileButton = new TileButton(column, row, mgui, ggui);
+                tiles[column][row] = tileButton;
                 add(tileButton);
             }
         }
     }
 
     // EFFECTS: updates all tiles' images
-    public void update() {
+    public void updateTiles() {
         for (int row = 0; row < tiles.length; row++) {
             for (int column = 0; column < tiles[row].length; column++) {
-                tiles[row][column].update();
+                tiles[column][row].updateTile();
             }
         }
     }

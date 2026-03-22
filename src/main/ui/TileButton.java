@@ -59,22 +59,25 @@ public class TileButton extends JPanel {
         ArrayList<Character> targetable = current.getInRange(current.getAttackFilter(), current.getRange());
         if (current == tileCharacter) {
             setBackground(Color.BLUE);
-        } else if (targetable.contains(tileCharacter)) {
+        } else if (targetable.contains(tileCharacter) && mokeGUI.inAttackView()) {
             setBackground(Color.RED);
         } else {
             setBackground(Color.GRAY);
         }
+        repaint();
     }
 
     // EFFECTS: checks to see if the tile has a character and updates image
     //          and updates background
-    public void update() {
+    public void updateTile() {
+        /*
         Tile tile = mokeGUI.getGame().getGameboard().findTile(cordX, cordY);
         if (tile.getCharacter() != null) {
             characterImage = mokeGUI.getCharacterIcon(tile.getCharacter()).getImage();
         } else {
             characterImage = null;
         }
+            */
         updateBackground();
         repaint();
     }

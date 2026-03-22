@@ -41,7 +41,7 @@ public class MokeGUI extends JFrame {
     private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
         new MWBerserker(), new MWNukeRain()));
     private static ArrayList<String> questions = new ArrayList<>(List.of(
-            "<html>WELCOME TO MOKE!!!<br>Would you like to load a previous save file?<html>",
+            "<html>WELCOME TO MOKE!!!<br>Would you like to load a previous save file?</html>",
             "Would you like to face COM?"
     ));
     private int width;
@@ -53,19 +53,18 @@ public class MokeGUI extends JFrame {
     private CharacterPickerGUI allyPickerPanel;
     private CharacterPickerGUI enemyPickerPanel;
     private YesNoSelectorGUI yesNoPanel;
-    private JLabel textLabel;
+    private JLabel gameOverLabel;
     private CharacterIconMap charMap;
 
     private MokeGame game;
     private Character current;
     private EnemyAI enemyAI;
-    private boolean newTurn;
     private String currentQuestion;
     private ArrayList<Character> allies;
     private ArrayList<Character> enemies;
     private boolean inAttackView;
 
-    private static final String JSON_DEST = "./data/mokeGameSavee.json";
+    private static final String JSON_DEST = "./data/mokeGameSave.json";
     private boolean didSave;
     private JsonReader jsonReader = new JsonReader(JSON_DEST);
     private JsonWriter jsonWriter = new JsonWriter(JSON_DEST);
@@ -97,20 +96,41 @@ public class MokeGUI extends JFrame {
         viewerPanel = new CharacterViewGUI(this);
         allyPickerPanel = new CharacterPickerGUI(this, allAllies);
         enemyPickerPanel = new CharacterPickerGUI(this, allEnemies);
-        textLabel = new JLabel();
+        gameOverLabel = new JLabel();
 
         mainPanel.add(yesNoPanel, "YesNo");
         mainPanel.add(viewerPanel, "View");
         mainPanel.add(allyPickerPanel, "AllyPicker");
         mainPanel.add(enemyPickerPanel, "EnemyPicker");
-        mainPanel.add(textLabel, "Text");
+        mainPanel.add(gameOverLabel, "GameOver");
         add(mainPanel);
     }
 
     // MODIFIES: this
-    // EFFECTS: starts game and processes all inputs while game isnt over
+    // EFFECTS: starts game and sets up all variables
     private void runMoke() {
         inAttackView = false;
+        didSave = false;
+        current = game.getCurrentCharacter();
+        gamePanel = new GameGUI(this, Math.max(MokeGame.getAllies().size(), MokeGame.getEnemies().size()) + 3);
+        mainPanel.add(gamePanel, "Game");
+        mokeLayout.show(mainPanel, "Game");
+        newTurn();
+    }
+
+    // EFFECTS: determines if the next turn is a player controlled turn or not
+    //          then starts correct turn
+    private void newTurn() {
+        if (MokeGame.getEnemies().contains(current) & enemyAI.getNeededForGame()) {
+            startAiTurn();
+        } else {
+            updateAll();
+        }
+    }
+
+    // EFFECTS: controls and displays the enemy ai during their turn
+    private void startAiTurn() {
+
     }
 
     // MODIFIES: this
@@ -141,8 +161,8 @@ public class MokeGUI extends JFrame {
                 if (loadFile()) {
                     askCom();
                 } else {
-                    allyPickerPanel.setPickerText("Failed to load file!<html><br><html>"
-                                + "Please input characters you want to have in your game");
+                    allyPickerPanel.setPickerText("<html>Failed to load file!<br>"
+                                + "Please input characters you want to have in your game</html>");
                 }
             }
             if (questions.indexOf(currentQuestion) == 0) {
@@ -171,13 +191,15 @@ public class MokeGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: sets allies to given list if its null then input enemies
     //          otherwise, sets enemies to given list and
-    //          asks for com
+    //          asks for com and makes game
     public void pickerDone(ArrayList<Character> characters) {
         if (allies == null) {
             allies = characters;
             inputEnemies();
         } else {
             enemies = characters;
+            game = new MokeGame(allies, enemies);
+            game.startBoard();
             askCom();
         }
     }
@@ -191,11 +213,73 @@ public class MokeGUI extends JFrame {
         Tile tile = game.getGameboard().findTile(x, y);
         if (tile.getCharacter() != null) {
             if (inAttackView) {
-                current.attack(tile.getCharacter());
+                if (current.getAttacksLeft() > 0 
+                        && current.getInRange(current.getAttackFilter(),
+                             current.getRange()).contains(tile.getCharacter())) {
+                    current.attack(tile.getCharacter());
+                    updateAll();
+                    gamePanel.addDialogue(current.getName() + " attacked " + tile.getCharacter().getName() + "!");
+                }
             } else {
                 viewerPanel.view(tile.getCharacter());
+                mokeLayout.show(mainPanel, "View");
             }
         }
+    }
+
+    // EFFECTS: returns back to gameboard after done viewing
+    public void doneViewing() {
+        mokeLayout.show(mainPanel, "Game");
+    }
+
+    // EFFECTS: updates the whole game and checks if game is over
+    public void updateAll() {
+        game.checkDead();
+        if (game.isGameOver()) {
+            gameOver();
+        }
+        gamePanel.updateGame();
+    }
+
+    // EFFECTS: brings player to game over screen
+    //          prints message if didn't save and quit
+    private void gameOver() {
+        mokeLayout.show(mainPanel, "GameOver");
+        if (didSave) {
+            gameOverLabel.setText("Thanks for playing!");
+        } else if (game.didWin()) {
+            gameOverLabel.setText("YOU WIN!!!");
+        } else {
+            gameOverLabel.setText("you lose...");
+        }
+    }
+
+    // EFFECTS: moves current character in given direction if able
+    //          otherwise tell player can't move that way
+    //          or out of moves
+    //          update afterwards if moved
+    public void movementPressed(String dir) {
+        if (current.getMovesLeft() > 0) {
+            if (game.moveCharacter(dir)) {
+                updateAll();
+            } else {
+                gamePanel.addDialogue("Can't move there!");
+            }
+        } else {
+            gamePanel.addDialogue("Out of moves!");
+        }
+    }
+
+    // EFFECTS: makes it game over
+    public void concede() {
+        game.setGameOver(false);
+    }
+
+    // EFFECTS: ends the turn and starts new turn
+    public void endTurn() {
+        game.nextTurn();
+        current = game.getCurrentCharacter();
+        newTurn();
     }
 
     // EFFECTS: turns a list of characters into a list of strings with their names
@@ -256,12 +340,13 @@ public class MokeGUI extends JFrame {
     // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
     // EFFECTS: saves game and closes
-    private void saveGame() {
+    public void saveGame() {
         try {
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
             didSave = true;
+            gameOver();
         } catch (FileNotFoundException e1) {
             didSave = false;
         }

@@ -3,15 +3,15 @@
         "rowLen": 4,
         "columnLen": 4
     },
-    "turnIndex": 0,
+    "turnIndex": 1,
     "enemies": [{
-        "atksLeft": 0,
+        "atksLeft": 1,
         "name": "Murky Water Cultist",
         "hp": 40,
         "x": 0,
         "y": 0,
         "statuses": [],
-        "movesLeft": 0
+        "movesLeft": 2
     }],
     "allies": [{
         "atksLeft": 2,
