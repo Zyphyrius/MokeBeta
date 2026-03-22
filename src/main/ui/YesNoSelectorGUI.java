@@ -1,6 +1,9 @@
 package ui;
 
 import javax.swing.*;
+
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +12,7 @@ import java.awt.event.ActionListener;
 // https://github.students.cs.ubc.ca/CPSC210/C3-LectureLabStarter
 
 // a panel that asks the player yes or no questions
+@ExcludeFromJacocoGeneratedReport
 public class YesNoSelectorGUI extends JPanel {
     private static final int VGAP = 50;
     private JLabel questionLabel;

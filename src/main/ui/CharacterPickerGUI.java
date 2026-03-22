@@ -10,12 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
 import model.Character;
 
 // Code referenced from CPSC 210 lecture lab
 // https://github.students.cs.ubc.ca/CPSC210/C3-LectureLabStarter
 
 // A picker that allows the user to add allies and enemies
+@ExcludeFromJacocoGeneratedReport
 public class CharacterPickerGUI extends CharacterViewGUI {
     private JComboBox<String> characterCombo;
     private JButton addButton;
@@ -63,5 +65,11 @@ public class CharacterPickerGUI extends CharacterViewGUI {
         } else {
             mokeGUI.pickerDone(currentCharacters);
         }
+    }
+
+    // EFFECTS: sets currentCharactersLabel to a message
+    //          used for json not loading and potentially other messages
+    public void setPickerText(String text) {
+        currentCharactersLabel.setText(text);
     }
 }

@@ -1,6 +1,9 @@
 package ui;
 
 import javax.swing.*;
+
+import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +13,7 @@ import model.Character;
 // https://github.students.cs.ubc.ca/CPSC210/C3-LectureLabStarter
 
 // A panel that views characters and their descriptions
+@ExcludeFromJacocoGeneratedReport
 public class CharacterViewGUI extends JPanel {
     private JPanel characterPanel;
     private JLabel characterImage;
