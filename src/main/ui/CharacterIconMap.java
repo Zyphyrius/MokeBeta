@@ -47,7 +47,7 @@ public class CharacterIconMap {
         characterMap.put("Murky Water Berserker", new ImageIcon(System.getProperty("user.dir") + sep
                 + "images" + sep + "mwberserker.png"));
         characterMap.put("Murky Water Nuke Rain", new ImageIcon(System.getProperty("user.dir") + sep
-                + "images" + sep + "mwnukerain.jpg"));
+                + "images" + sep + "mwnukerain.png"));
     }
 
     // EFFECTS: returns icon for given character
