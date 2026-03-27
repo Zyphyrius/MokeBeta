@@ -28,8 +28,8 @@ public class CharacterViewGUI extends JPanel {
 
         characterPanel = new JPanel();
         characterPanel.setAlignmentX(LEFT_ALIGNMENT);
-        characterPanel.setPreferredSize(new Dimension((int) (mokeGUI.getWidth() * 0.5),
-                            (int) (mokeGUI.getHeight() * 0.5)));
+        characterPanel.setPreferredSize(new Dimension((int) (mokeGUI.getWidth() * 0.6),
+                            (int) (mokeGUI.getHeight() * 0.6)));
         add(characterPanel);
         
 
