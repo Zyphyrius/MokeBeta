@@ -37,6 +37,7 @@ public class MokeGame implements Writable {
         currentCharacter = turnOrder.get(0);
         setUpCharacter();
         gameOver = false;
+        EventLog.getInstance().logEvent(new Event("Started game. Added " + allies + " and " + enemies));
     }
 
     // REQUIRES: allies.size() > 0, enemies.size() > 0, columnLength > 0, rowLength > 0
@@ -89,6 +90,7 @@ public class MokeGame implements Writable {
         }
         currentCharacter = turnOrder.get(turnIndex);
         setUpCharacter();
+        EventLog.getInstance().logEvent(new Event("New turn"));
     }
 
     // EFFECTS: sets up current character by setting moves, attacks, and statuses
@@ -164,6 +166,7 @@ public class MokeGame implements Writable {
     // EFFECTS: gets current character to attack target
     public void attackCharacter(Character target) {
         currentCharacter.attack(target);
+        EventLog.getInstance().logEvent(new Event(currentCharacter.getName() + " attacked " + target.getName()));
     }
 
     // EFFECTS: moves current character in direction if valid, then places on gameboard. true if valid, false if not
@@ -187,6 +190,7 @@ public class MokeGame implements Writable {
         if (gameboard.validTile(newX, newY)) {
             moveDirection.run();
             gameboard.placeCharacter(newX, newY, currentCharacter);
+            EventLog.getInstance().logEvent(new Event(currentCharacter.getName() + " moved " + direction));
             return true;
         }
         return false;

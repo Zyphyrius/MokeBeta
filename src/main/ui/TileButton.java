@@ -5,6 +5,7 @@ import javax.swing.*;
 import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
 import model.Tile;
 import model.Character;
+import model.MokeGame;
 
 import java.util.ArrayList;
 import java.awt.*;
@@ -67,10 +68,12 @@ public class TileButton extends JPanel {
     //          and updates background
     public void updateTile() {
         Tile tile = mokeGUI.getGame().getGameboard().findTile(cordX, cordY);
+        String turnNumber = Integer.toString(MokeGame.getTurnOrder().indexOf(tile.getCharacter()) + 1);
         if (tile.getCharacter() != null) {
             characterImage = mokeGUI.getCharacterIcon(tile.getCharacter()).getImage();
             nameLabel.setText("<html>" + tile.getCharacter().getName() + "<br>"
-                    + tile.getCharacter().getHealth() + "/" + tile.getCharacter().getMaxHealth() + "</hmtl>");
+                    + tile.getCharacter().getHealth() + "/" + tile.getCharacter().getMaxHealth() + "<br>"
+                    + "#" + turnNumber + "</hmtl>");
         } else {
             characterImage = null;
             nameLabel.setText("");

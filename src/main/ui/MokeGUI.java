@@ -5,6 +5,8 @@ import javax.swing.*;
 import ca.ubc.cs.ExcludeFromJacocoGeneratedReport;
 
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import model.AnAverageHailey;
 import model.BarcelonaBeefBogger;
 import model.Character;
 import model.EnemyAI;
+import model.Event;
+import model.EventLog;
 import model.FridgeWagonMotor;
 import model.HotMould;
 import model.LordFishbowl;
@@ -33,7 +37,7 @@ import persistence.JsonWriter;
 
 // The frame that holds all of moke's guis
 @ExcludeFromJacocoGeneratedReport
-public class MokeGUI extends JFrame {
+public class MokeGUI extends JFrame implements WindowListener {
     private static ArrayList<Character> allAllies = new ArrayList<>(List.of(new LordFishbowl(), new HotMould(),
         new FridgeWagonMotor(), new BarcelonaBeefBogger(), new MopedMarauder(), new AnAverageHailey()));
     private static ArrayList<Character> allEnemies = new ArrayList<>(List.of(new MWCultist(), new MWTrooper(), 
@@ -72,6 +76,7 @@ public class MokeGUI extends JFrame {
     //          then asks if want to load game
     public MokeGUI() {
         super("Moke");
+        addWindowListener(this);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) (scrn.width * 0.9);
@@ -284,7 +289,7 @@ public class MokeGUI extends JFrame {
 
     // EFFECTS: performs attack, updates, then adds dialogue
     private void attack(Character attacker, Character defender) {
-        attacker.attack(defender);
+        game.attackCharacter(defender);
         updateAll();
         gamePanel.addDialogue(attacker.getName() + " attacked " + defender.getName() + "!");
     }
@@ -423,5 +428,45 @@ public class MokeGUI extends JFrame {
         } catch (IOException e1) {
             return false;
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        EventLog el = EventLog.getInstance();
+        String message = "";
+        for (Event event : el) {
+            message += event.getDescription() + "\n";
+        }
+        System.out.println(message);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        //do nothing
     }
 }

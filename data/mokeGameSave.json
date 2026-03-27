@@ -1,65 +1,25 @@
 {
     "gameboard": {
-        "rowLen": 7,
-        "columnLen": 7
+        "rowLen": 4,
+        "columnLen": 4
     },
-    "turnIndex": 4,
-    "enemies": [
-        {
-            "atksLeft": 1,
-            "name": "Murky Water Cultist",
-            "hp": 40,
-            "x": 0,
-            "y": 2,
-            "statuses": [],
-            "movesLeft": 0
-        },
-        {
-            "atksLeft": 1,
-            "name": "Murky Water Cultist",
-            "hp": 40,
-            "x": 1,
-            "y": 2,
-            "statuses": [],
-            "movesLeft": 0
-        },
-        {
-            "atksLeft": 1,
-            "name": "Murky Water Cultist",
-            "hp": 40,
-            "x": 2,
-            "y": 2,
-            "statuses": [],
-            "movesLeft": 0
-        },
-        {
-            "atksLeft": 1,
-            "name": "Murky Water Berserker",
-            "hp": 120,
-            "x": 3,
-            "y": 4,
-            "statuses": [],
-            "movesLeft": 0
-        }
-    ],
-    "allies": [
-        {
-            "atksLeft": 1,
-            "name": "Moped Marauder",
-            "hp": 70,
-            "x": 6,
-            "y": 6,
-            "statuses": [],
-            "movesLeft": 5
-        },
-        {
-            "atksLeft": 0,
-            "name": "Moped Marauder",
-            "hp": 70,
-            "x": 5,
-            "y": 6,
-            "statuses": [],
-            "movesLeft": 0
-        }
-    ]
+    "turnIndex": 0,
+    "enemies": [{
+        "atksLeft": 0,
+        "name": "Murky Water Cultist",
+        "hp": 10,
+        "x": 1,
+        "y": 1,
+        "statuses": [],
+        "movesLeft": 0
+    }],
+    "allies": [{
+        "atksLeft": 2,
+        "name": "Lord Fishbowl",
+        "hp": 80,
+        "x": 2,
+        "y": 2,
+        "statuses": [],
+        "movesLeft": 2
+    }]
 }
