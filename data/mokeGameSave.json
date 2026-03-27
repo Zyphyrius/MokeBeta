@@ -3,23 +3,23 @@
         "rowLen": 4,
         "columnLen": 4
     },
-    "turnIndex": 0,
+    "turnIndex": 1,
     "enemies": [{
         "atksLeft": 0,
         "name": "Murky Water Cultist",
         "hp": 10,
         "x": 1,
-        "y": 1,
+        "y": 2,
         "statuses": [],
-        "movesLeft": 0
+        "movesLeft": 1
     }],
     "allies": [{
         "atksLeft": 2,
         "name": "Lord Fishbowl",
-        "hp": 80,
+        "hp": 60,
         "x": 2,
-        "y": 2,
+        "y": 1,
         "statuses": [],
-        "movesLeft": 2
+        "movesLeft": 1
     }]
 }

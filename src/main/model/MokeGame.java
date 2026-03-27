@@ -37,7 +37,7 @@ public class MokeGame implements Writable {
         currentCharacter = turnOrder.get(0);
         setUpCharacter();
         gameOver = false;
-        EventLog.getInstance().logEvent(new Event("Started game. Added " + allies + " and " + enemies));
+        EventLog.getInstance().logEvent(new Event("Started game. Added " + getNames(allies) + " and " + getNames(enemies)));
     }
 
     // REQUIRES: allies.size() > 0, enemies.size() > 0, columnLength > 0, rowLength > 0
@@ -207,6 +207,15 @@ public class MokeGame implements Writable {
     public void setGameOver(boolean win) {
         gameOver = true;
         this.win = win;
+    }
+
+    // EFFECTS: returns list of all characters names
+    private ArrayList<String> getNames(ArrayList<Character> characters) {
+        ArrayList<String> names = new ArrayList<>();
+        for (Character c : characters) {
+            names.add(c.getName());
+        }
+        return names;
     }
 
     public int getTurnIndex() {
