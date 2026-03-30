@@ -22,3 +22,66 @@ I intend for this game to be simple and usable by anyone who wants to play a fun
 - As a user, I want to be able to view the boardstate of the game
 - As a user, I want to be able to pause, save, and leave the game on my turn, or just leave by conceding
 - As a user, I want to be able to reload my saved game
+
+## Phase 4 Task 2 Event Log Example:
+Started game. Added [Hot Mould, Fridge Wagon Motor] and [Murky Water Berserker, Murky Water Nuke Rain]
+Hot Mould moved up
+Hot Mould attacked Murky Water Nuke Rain
+Hot Mould moved down
+New turn
+Fridge Wagon Motor moved up
+Fridge Wagon Motor moved up
+Fridge Wagon Motor moved up
+Fridge Wagon Motor moved left
+Fridge Wagon Motor attacked Murky Water Nuke Rain
+Fridge Wagon Motor moved right
+Fridge Wagon Motor moved right
+Fridge Wagon Motor moved down
+New turn
+Murky Water Berserker moved down
+Murky Water Berserker moved right
+Murky Water Berserker moved right
+Murky Water Berserker moved right
+Murky Water Berserker attacked Fridge Wagon Motor
+New turn
+Murky Water Nuke Rain moved right
+Murky Water Nuke Rain moved down
+Murky Water Nuke Rain moved down
+Murky Water Nuke Rain moved right
+Murky Water Nuke Rain attacked Fridge Wagon Motor
+New turn
+Hot Mould attacked Murky Water Nuke Rain
+New turn
+New turn
+Murky Water Berserker attacked Fridge Wagon Motor
+Murky Water Berserker attacked Fridge Wagon Motor
+Murky Water Berserker attacked Fridge Wagon Motor
+Murky Water Berserker attacked Fridge Wagon Motor
+Murky Water Berserker attacked Fridge Wagon Motor
+New turn
+Hot Mould attacked Murky Water Berserker
+New turn
+Fridge Wagon Motor attacked Murky Water Berserker
+Fridge Wagon Motor moved left
+Fridge Wagon Motor moved left
+Fridge Wagon Motor moved left
+Fridge Wagon Motor moved left
+Fridge Wagon Motor moved down
+Fridge Wagon Motor moved right
+Fridge Wagon Motor moved down
+New turn
+Murky Water Berserker moved down
+Murky Water Berserker moved down
+Murky Water Berserker attacked Hot Mould
+Murky Water Berserker attacked Hot Mould
+Murky Water Berserker attacked Hot Mould
+New turn
+Hot Mould attacked Murky Water Berserker
+New turn
+Fridge Wagon Motor moved right
+Fridge Wagon Motor attacked Murky Water Berserker
+
+## Phase 4 Task 3 Reflection:
+One thing that possibly could have been improved is removing my reliance on the MokeGUI class to run the game. I'm not sure if it's possible, considering how much the game relies on player input. At the very least, it might be more practical to have MokeGame have a field of EnemyAI, creating a bi-directional relationship. This would remove EnemyAI's dependency on MokeGUI, making it more smooth.
+
+Another possible change would be to remove GameGUI and make it a generic JPanel underneath MokeGUI. It doesn't do too much besides carry on the update method to its fields. It could all be handled by MokeGUI instead to make things less cluttered. 

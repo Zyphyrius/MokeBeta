@@ -49,6 +49,7 @@ public class CharacterPickerGUI extends CharacterViewGUI {
         view(characters.get(0));
     }
 
+    // MODIFIES: this
     // EFFECTS: creates combo box and adds it
     private void addComboBox(ArrayList<Character> characters) {
         ArrayList<String> characterNames = mokeGUI.charactersToNames(characters);

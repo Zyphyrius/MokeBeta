@@ -53,6 +53,7 @@ public class CharacterViewGUI extends JPanel {
         mokeGUI.doneViewing();
     }
 
+    // MODIFIES: this
     // EFFECTS: views character and their stats + description + statuses if any
     //          displays image for character
     public void view(Character c) {

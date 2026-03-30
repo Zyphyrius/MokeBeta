@@ -127,6 +127,7 @@ public class MokeGUI extends JFrame implements WindowListener {
         newTurn();
     }
 
+    // MODIFIES: this
     // EFFECTS: determines if the next turn is a player controlled turn or not
     //          then starts correct turn and sets enemyTurn to true if ai is in control
     private void newTurn() {
@@ -208,6 +209,7 @@ public class MokeGUI extends JFrame implements WindowListener {
         mokeLayout.show(mainPanel, "YesNo");
     }
 
+    // MODIFIES: this
     // EFFECTS: handles yes no input from player
     //          with yes = 1, no = 0
     //          perform different next action depending on current question
@@ -343,6 +345,7 @@ public class MokeGUI extends JFrame implements WindowListener {
         gameOver();
     }
 
+    // MODIFIES: this
     // EFFECTS: ends the turn and starts new turn
     public void endTurn() {
         game.nextTurn();
@@ -364,9 +367,8 @@ public class MokeGUI extends JFrame implements WindowListener {
         return charMap.getCharacterImage(c);
     }
 
-    // Centres frame on desktop
-	// modifies: this
-	// effects:  location of frame is set so frame is centred on desktop
+	// MODIFIES: this
+	// EFFECTS:  location of frame is set so frame is centred on desktop
     private void centreOnScreen() {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
@@ -420,6 +422,7 @@ public class MokeGUI extends JFrame implements WindowListener {
         }
     }
     
+    // MODIFIES: this
     // EFFECTS: loads saved game and returns true if successful, false if not
     private boolean loadFile() {
         try {

@@ -51,6 +51,7 @@ public class ActionBox extends JPanel {
         currentPanel = "MAIN";
     }
 
+    // MODIFIES: this
     // EFFECTS: sets up main panel
     private void setUpMain() {
         mainPanel = new JPanel();
@@ -63,6 +64,7 @@ public class ActionBox extends JPanel {
         add(mainPanel, "MAIN");
     }
 
+    // MODIFIES: this
     // EFFECTS: sets up move panel
     private void setUpMove() {
         movePanel = new JPanel();
@@ -75,6 +77,7 @@ public class ActionBox extends JPanel {
         add(movePanel, "MOVE");
     }
 
+    // MODIFIES: this
     // EFFECTS: initializes all buttons
     @SuppressWarnings("methodlength")
     private void initButtons() {
@@ -139,24 +142,28 @@ public class ActionBox extends JPanel {
         });
     }
 
+    // MODIFIES: this
     // EFFECTS: brings player back to main panel
     public void mainMenu() {
         actionLayout.show(this, "MAIN");
         currentPanel = "MAIN";
     }
 
+    // MODIFIES: this
     // EFFECTS: brings player to move panel
     private void movePressed() {
         actionLayout.show(this, "MOVE");
         currentPanel = "MOVE";
     }
 
+    // MODIFIES: this
     // EFFECTS: brings player attack panel
     private void attackPressed() {
         actionLayout.show(this, "ATTACK");
         currentPanel = "ATTACK";
     }
 
+    // MODIFIES: this
     // EFFECTS: brings player to empty panel
     public void showEmpty() {
         actionLayout.show(this, "EMPTY");

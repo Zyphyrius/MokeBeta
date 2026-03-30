@@ -64,6 +64,7 @@ public class TileButton extends JPanel {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: checks to see if the tile has a character and updates image
     //          and updates background
     public void updateTile() {
@@ -89,7 +90,7 @@ public class TileButton extends JPanel {
             int width = getWidth();
             int height = getHeight();
             int sideMargin = (int) (width * 0.1);
-            int topMargin = (int) (height * 0.3);
+            int topMargin = (int) (height * 0.2);
             g.drawImage(characterImage, sideMargin, topMargin, 
                     width - 2 * sideMargin, height - topMargin, null);
         }
